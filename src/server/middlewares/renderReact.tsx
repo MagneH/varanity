@@ -62,9 +62,21 @@ export default (
   const preloadedAssets = preload.map(f => assets[f]);
 
   // Return react rendering middleware
-  return function renderReact(req, res) {
+  return async function renderReact(req, res) {
     // Prepare
-    const initialState = { application: { isOffline: false } };
+    const initialState = {
+      application: { isOffline: false },
+      documents: { data: {} },
+      previews: { data: {} },
+    };
+    // eslint-disable-next-line no-underscore-dangle
+    if (req.app.isPreview === true && req.app.initialDocumentData) {
+      // eslint-disable-next-line no-underscore-dangle
+      initialState.previews.data = req.app.initialDocumentData;
+    } else if (req.app.initialDocumentData) {
+      initialState.documents.data = req.app.initialDocumentData;
+    }
+
     const { store } = createStore({
       ...initialState,
       router: { location: createLocation(req.originalUrl) },

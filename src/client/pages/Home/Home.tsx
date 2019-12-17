@@ -6,7 +6,7 @@ import { GetStartedSection } from './GetStartedSection/GetStartedSection';
 import { TerminalHeader } from './TerminalHeader/TerminalHeader';
 
 // Exports
-export const Home = () => (
+export const Home = ({ language, location }: { language: string; location: Location }) => (
   <>
     <Helmet>
       <title itemProp="name" lang="en">

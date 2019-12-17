@@ -5,11 +5,15 @@ import pickBy from 'lodash/pickBy';
 import * as services from '../services';
 import * as router from './modules/router';
 import * as application from './modules/application';
+import * as previews from './modules/previews';
+import * as documents from './modules/documents';
 
 // Register modules
 const modules = {
   application,
   router,
+  previews,
+  documents,
 };
 
 // Exports

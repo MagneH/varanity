@@ -14,7 +14,7 @@ import { RootState } from '../../redux';
 import classes from './Navbar.module.scss';
 
 // Exports
-export const Navbar = () => {
+export const Navbar = ({ language }: { language: string }) => {
   const location = useLocation();
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
