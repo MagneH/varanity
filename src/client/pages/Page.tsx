@@ -11,7 +11,6 @@ import { actionCreators as previewActions } from '../redux/modules/previews';
 import { actionCreators as documentActions } from '../redux/modules/documents';
 import { Header } from '../components/Header/Header';
 import { Main } from '../components/Main/Main';
-import { ArticleComponent } from '../components/Article/Article';
 
 // Types
 export interface PageProps {
@@ -53,8 +52,6 @@ export const Page = ({ isPreview, location, history, match, slug }: PageProps) =
       }
     }
   }, [location]);
-
-  console.log(page);
 
   return page ? (
     <>

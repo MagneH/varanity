@@ -8,6 +8,7 @@ import * as application from './modules/application';
 import * as previews from './modules/previews';
 import * as documents from './modules/documents';
 import * as templates from './modules/templates';
+import * as authors from './modules/authors';
 
 // Register modules
 const modules = {
@@ -16,6 +17,7 @@ const modules = {
   previews,
   documents,
   templates,
+  authors,
 };
 
 // Exports

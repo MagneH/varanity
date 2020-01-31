@@ -69,6 +69,7 @@ export default (
       documents: { data: {} },
       previews: { data: {} },
       templates: { data: {} },
+      authors: { data: {} },
     };
     // eslint-disable-next-line no-underscore-dangle
     if (req.app.isPreview === true && req.app.initialDocumentData) {
@@ -80,6 +81,10 @@ export default (
 
     if (req.app.initialTemplateData) {
       initialState.templates.data = req.app.initialTemplateData;
+    }
+
+    if (req.app.initialAuthorData) {
+      initialState.authors.data = req.app.initialAuthorData;
     }
 
     const { store } = createStore({
