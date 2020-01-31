@@ -1,0 +1,32 @@
+@import '../../styles/mixins/fonts/open-sans';
+@import '../../styles/mixins/media/screen';
+@import '../../styles/colors';
+
+// -------------
+// Local mixins
+// -------------
+@mixin local--large-screen {
+  @include desktop-up {
+    @content;
+  }
+}
+
+.page {
+  // ----------
+  // Overrides
+  // ----------
+  --color-text: #{$color-white--100};
+  --color-background: #{$color-dark-blue};
+  --color-background--dark: #{$color-dark-blue--dark};
+
+  // ------
+  // Style
+  // ------
+  color: var(--color-text);
+  background: var(--color-background)
+    linear-gradient(-60deg, var(--color-background--dark) 50%, var(--color-background) 50%);
+}
+.pageTitle {
+  @include open-sans(600);
+  font-size: 2em;
+}

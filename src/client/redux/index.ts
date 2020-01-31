@@ -7,6 +7,7 @@ import * as router from './modules/router';
 import * as application from './modules/application';
 import * as previews from './modules/previews';
 import * as documents from './modules/documents';
+import * as templates from './modules/templates';
 
 // Register modules
 const modules = {
@@ -14,6 +15,7 @@ const modules = {
   router,
   previews,
   documents,
+  templates,
 };
 
 // Exports
