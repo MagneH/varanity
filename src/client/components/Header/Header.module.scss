@@ -6,7 +6,7 @@
   // ----------
   // Overrides
   // ----------
-  --color-text: #{$color-white--100};
+  --color-text: #{$color-black--100};
 
   // ------
   // Style
@@ -14,15 +14,15 @@
   font-size: 1.1em;
   overflow: hidden;
   color: var(--color-text);
-  text-shadow: 0 0 0.2em $color-black--100;
   display: flex;
   flex-direction: column;
   align-items: center;
-  @include responsive-background(
-    '../../../../assets/images/florian-olivo-1169465-unsplash.png',
-    'linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0.3) 100%),',
-    'no-repeat center center / cover'
-  );
+  background-color: var(--color-background);
+  //@include responsive-background(
+  //  '../../../../assets/images/florian-olivo-1169465-unsplash.png',
+  //  'linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0.3) 100%),',
+  //  'no-repeat center center / cover'
+  //);
 }
 .headerHero {
   flex-basis: calc(var(--navbar-height) * 8);
@@ -31,6 +31,7 @@
   align-items: center;
   justify-content: center;
   align-self: stretch;
+  margin-top: 100px;
 }
 .headerTitle {
   font-size: 4em;
@@ -40,7 +41,7 @@
 }
 .headerSubtitle {
   // Overrides
-  --color-text: #{$color-turquoise};
+  --color-text: #{$color-black--100};
 
   // Style
   @include open-sans(300);

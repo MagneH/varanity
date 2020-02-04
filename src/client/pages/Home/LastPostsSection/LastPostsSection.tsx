@@ -8,10 +8,10 @@ import { ReactComponent as IconHomeHeart } from '../../../../assets/vector/icons
 import { ReactComponent as IconFlightTakeoff } from '../../../../assets/vector/icons/Icon-Flight-Takeoff.svg';
 
 // Styles
-import classes from './FeaturesSection.module.scss';
+import classes from './LastPostsSection.module.scss';
 
 // Exports
-export const FeaturesSection = () => (
+export const LastPostsSection = () => (
   <Section className={classes.featuresSection}>
     <div className={classes.featuresSectionGrid}>
       <Feature Icon={IconSpeedometer} title="Performance" subtitle="Lighthouse score = 100">

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Main } from '../../components/Main/Main';
-import { FeaturesSection } from './FeaturesSection/FeaturesSection';
-import { GetStartedSection } from './GetStartedSection/GetStartedSection';
+import { LastPostsSection } from './LastPostsSection/LastPostsSection';
 import { TerminalHeader } from './TerminalHeader/TerminalHeader';
+import { FeaturedSection } from './FeaturedSection/FeaturedSection';
 
 // Exports
 export const Home = ({ language, location }: { language: string; location: Location }) => (
@@ -15,8 +15,8 @@ export const Home = ({ language, location }: { language: string; location: Locat
     </Helmet>
     <TerminalHeader title="varan" subtitle="modern webdev made simple" animation="install" />
     <Main>
-      <FeaturesSection />
-      <GetStartedSection />
+      <LastPostsSection />
+      <FeaturedSection />
     </Main>
   </>
 );

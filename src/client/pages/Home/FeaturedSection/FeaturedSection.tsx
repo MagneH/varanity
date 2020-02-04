@@ -5,10 +5,10 @@ import { Link } from '../../../components/Link/Link';
 import { Emoji } from '../../../components/Emoji/Emoji';
 
 // Styles
-import classes from './GetStartedSection.module.scss';
+import classes from './FeaturedSection.module.scss';
 
 // Exports
-export const GetStartedSection = () => (
+export const FeaturedSection = () => (
   <Section className={classes.getStartedSection}>
     <h2 className={classes.getStartedSectionTitle}>
       <Emoji value="🚀" label="Rocket emoji" />

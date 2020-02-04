@@ -68,12 +68,19 @@ $local--hamburger--line-height: 4px;
 }
 .navbarLogo {
   @include accessible-focus();
-  height: var(--navbar-height);
+  height: calc(var(--navbar-height));
   width: calc(var(--navbar-height) * (64 / 44));
-  background: url('../../../assets/vector/logo.svg') no-repeat center center;
+  background: url('../../../assets/vector/logo-v.svg') no-repeat center center;
   background-size: contain;
   display: flex;
   z-index: 10;
+  margin-right: 50px;
+  @include local--large-screen {
+    background: url('../../../assets/vector/logo-varanity.svg') no-repeat center center;
+    background-size: cover;
+    height: calc(var(--navbar-height));
+    width: calc(var(--navbar-height) * (399 / 87));
+  }
 }
 .navbarLogoText {
   font-size: 0;

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
+import {SanityDocument} from "@sanity/client";
 import { Link } from '../Link/Link';
 import { NavHamburger } from './NavHamburger/NavHamburger';
 import { NavLink } from './NavLink/NavLink';
@@ -12,9 +13,17 @@ import { RootState } from '../../redux';
 
 // Styles
 import classes from './Navbar.module.scss';
+import url from "url";
+import {ArticleModel} from "../../pages/Article";
+import {PageModel} from "../../pages/Page";
 
 // Exports
 export const Navbar = ({ language }: { language: string }) => {
+  const pages = useSelector<RootState, PageModel[]>(state => {
+    console.log(Object.values(state.documents.data));
+    return Object.values(state.documents.data).filter((document: SanityDocument) => document._type === 'page');
+  });
+  console.log(pages);
   const location = useLocation();
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -77,15 +86,13 @@ export const Navbar = ({ language }: { language: string }) => {
                 [classes.navbarListContentExpanded]: isOpen,
               })}
             >
-              <li className={classNames(classes.navbarListItem, classes.navbarListItemMobile)}>
-                <NavLink to="/">Home</NavLink>
-              </li>
-              <li className={classes.navbarListItem}>
-                <NavLink to="/examples">Examples</NavLink>
-              </li>
-              <li className={classes.navbarListItem}>
-                <NavLink to="https://github.com/ersims/varan-boilerplate">GitHub</NavLink>
-              </li>
+              {pages.map((page: PageModel) => {
+                return(
+                  <li className={classNames(classes.navbarListItem)} key={page._id}>
+                    <NavLink to={`/${language}/pages/${page.slug.current}`}>{page.title}</NavLink>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </CSSTransition>

@@ -7,6 +7,7 @@
   opacity: 1;
   transform: translate3d(0, 0, 0);
   position: initial;
+  overflow: hidden;
   @include use-motion {
     transition: all 200ms ease-in-out;
   }
