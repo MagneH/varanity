@@ -73,7 +73,9 @@ class SanityService extends Service {
   public async getNewestArticles() {
     if (this.ServerClient && this.initialized) {
       const query = `
-        *[_type == "article"] | order(_createdAt desc) [0..9]
+        *[_type == "article"] | order(_createdAt desc) [0..9] {
+          _type, authors[]{author->{bio, image, name, slug, _id}}, slug, title, categories, mainImage, body, isFeatured
+        }
       `;
       return this.ServerClient.fetch(query, {});
     }

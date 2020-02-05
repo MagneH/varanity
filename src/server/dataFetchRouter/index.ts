@@ -22,21 +22,20 @@ dataFetchRouter.use(async (req, res, next) => {
     {},
   );
   const pages = await req.app.services.SanityService.getAllPages();
-  req.app.initialDocumentData = pages.reduce(
-    (acc: Record<SanityDocument['slug']['current'], SanityDocument>, cur: SanityDocument) => {
-      acc[cur.slug.current] = cur;
-      return acc;
-    },
-    {},
-  );
+  req.app.initialPageData = {
+    ...req.app.initialPageData,
+    ...pages.reduce(
+      (acc: Record<SanityDocument['slug']['current'], SanityDocument>, cur: SanityDocument) => {
+        acc[cur.slug.current] = cur;
+        return acc;
+      },
+      {},
+    ),
+  };
 
-  return next();
-});
-
-dataFetchRouter.get('/:language/', async (req, res, next) => {
   const articles = await req.app.services.SanityService.getNewestArticles();
-  req.app.initialDocumentData = {
-    ...req.app.initialDocumentData,
+  req.app.initialArticleData = {
+    ...req.app.initialArticleData,
     ...articles.reduce(
       (acc: Record<SanityDocument['slug']['current'], SanityDocument>, cur: SanityDocument) => {
         acc[cur.slug.current] = { ...cur, isOnFrontPage: true };
@@ -45,19 +44,8 @@ dataFetchRouter.get('/:language/', async (req, res, next) => {
       {},
     ),
   };
-  return next();
-});
 
-dataFetchRouter.get('/:language/pages/:pageSlug', async (req, res, next) => {
-  // req.app.isPreview = false;
-  // const { pageSlug } = req.params;
-  // if (pageSlug && typeof pageSlug === 'string') {
-  //   req.app.initialDocumentData = {};
-  //   [
-  //     req.app.initialDocumentData[pageSlug],
-  //   ] = await req.app.services.SanityService.getDocumentBySlug(pageSlug);
-  // }
-  next();
+  return next();
 });
 
 dataFetchRouter.get('/:language/articles/:articleSlug', async (req, res, next) => {

@@ -1,0 +1,42 @@
+@import '../../styles/mixins/fonts/open-sans';
+@import '../../styles/mixins/media/screen';
+@import '../../styles/colors';
+
+// -------------
+// Local mixins
+// -------------
+@mixin local--large-screen {
+  @include desktop-up {
+    @content;
+  }
+}
+
+.authorCard {
+  // ----------
+  // Overrides
+  // ----------
+  --color-text: #{$color-black--100};
+  --color-text-lighter: #{$color-black--60};
+  --color-text-light: #{$color-black--20};
+  --color-background: #{$color-white--100};
+  --color-border: #{$color-black--20};
+  // ------
+  // Style
+  // ------
+  color: var(--color-text);
+  background: var(--color-background);
+  display: flex;
+  margin-right: 25px;
+}
+
+.authorInfoContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-top: 0;
+}
+
+.authorName {
+  margin-top: 16px;
+  color: var(--color-text-lighter);
+}

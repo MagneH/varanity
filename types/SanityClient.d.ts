@@ -30,6 +30,7 @@ declare module '@sanity/client' {
     _type: string;
     slug: { _type: string; current: string };
     isOnFrontPage?: boolean;
+    isFeatured?: boolean;
     [key: string]: any;
   }
 

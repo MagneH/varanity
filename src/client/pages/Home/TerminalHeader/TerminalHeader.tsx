@@ -9,11 +9,7 @@ import classes from './TerminalHeader.module.scss';
 type TerminalHeaderProps = HeaderProps & TerminalProps;
 
 // Exports
-export const TerminalHeader = ({
-  title,
-  subtitle,
-  description,
-}: TerminalHeaderProps) => (
+export const TerminalHeader = ({ title, subtitle, description }: TerminalHeaderProps) => (
   <Header
     title={title}
     subtitle={subtitle}

@@ -1,0 +1,31 @@
+@import '../../styles/mixins/fonts/open-sans';
+@import '../../styles/mixins/media/screen';
+@import '../../styles/colors';
+
+// -------------
+// Local mixins
+// -------------
+@mixin local--large-screen {
+  @include desktop-up {
+    @content;
+  }
+}
+
+.authorPicture {
+  // ----------
+  // Overrides
+  // ----------
+  --color-text: #{$color-black--100};
+  --color-background: #{$color-white--100};
+  --color-border: #{$color-black--20};
+  // ------
+  // Style
+  // ------
+  color: var(--color-text);
+  background: var(--color-background);
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0;
+}

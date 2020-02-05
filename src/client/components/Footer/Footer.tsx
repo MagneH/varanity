@@ -10,6 +10,7 @@ export const Footer = ({ language }: { language: string }) => (
     <p className={classes.footerDescription}>
       Made with
       <Emoji value="❤" label="Heart emoji" />
+      by Magne
     </p>
     <p className={classes.footerCopyright}>
       Copyright (c) 2018 -{new Date().getFullYear()}, All rights reserved

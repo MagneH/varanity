@@ -27,7 +27,7 @@ export interface PageModel extends SanityDocument {
   title: string;
 }
 
-export const Page = ({ isPreview, location, history, match, slug }: PageProps) => {
+export const Page = ({ isPreview, location, history, match, slug, language }: PageProps) => {
   const page = useSelector<RootState, PageModel>(state => {
     if (isPreview) {
       const { query } = url.parse(location.search, true);

@@ -7,6 +7,8 @@ declare global {
       services: any;
       initialTemplateData: Record<SanityDocument['slug']['current'], SanityDocument>;
       initialDocumentData: Record<SanityDocument['slug']['current'], SanityDocument>;
+      initialPageData: Record<SanityDocument['slug']['current'], SanityDocument>;
+      initialArticleData: Record<SanityDocument['slug']['current'], SanityDocument>;
       initialAuthorData: Record<SanityDocument['_id'], SanityDocument>;
       routeSpecificData: any;
       isPreview?: boolean;

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
-import {SanityBlock, SanityDocument} from '@sanity/client';
+import { SanityBlock, SanityDocument } from '@sanity/client';
 import { useDispatch, useSelector } from 'react-redux';
 import url from 'url';
 import { usePreview } from '../hooks/usePreview';
@@ -11,6 +11,7 @@ import { actionCreators as previewActions } from '../redux/modules/previews';
 import { actionCreators as documentActions } from '../redux/modules/documents';
 import { Header } from '../components/Header/Header';
 import { Main } from '../components/Main/Main';
+import { AuthorModel } from '../redux/modules/authors';
 
 // Types
 export interface ArticleProps {
@@ -26,11 +27,12 @@ export interface ArticleProps {
 export interface ArticleModel extends SanityDocument {
   title: string;
   ingress?: SanityBlock;
-  mainImage?: { asset?: {_ref: string } };
+  mainImage?: { asset?: { _ref: string }; alt: string };
+  authors: { author: AuthorModel }[];
   isFeatured: boolean;
 }
 
-export const Article = ({ isPreview, location, history, match, slug }: ArticleProps) => {
+export const Article = ({ isPreview, location, history, match, slug, language }: ArticleProps) => {
   const article = useSelector<RootState, ArticleModel>(state => {
     if (isPreview) {
       const { query } = url.parse(location.search, true);
@@ -39,7 +41,6 @@ export const Article = ({ isPreview, location, history, match, slug }: ArticlePr
     }
     return state.documents.data[slug];
   });
-  console.log(article);
 
   // eslint-disable-next-line no-underscore-dangle
   if (isPreview) {
@@ -66,7 +67,6 @@ export const Article = ({ isPreview, location, history, match, slug }: ArticlePr
           Welcome to Varanity
         </title>
       </Helmet>
-      <Header title="Hello World" subtitle="show me — don't tell me" />
       <Main>
         <ArticleComponent article={article} />
       </Main>

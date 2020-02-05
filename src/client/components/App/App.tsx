@@ -78,7 +78,7 @@ export const App = hot(() => {
                 }}
               />
               <Route exact path="/" component={Home}>
-                <Redirect to="/nb" />
+                <Redirect to="/en" />
               </Route>
             </Switch>
           </div>

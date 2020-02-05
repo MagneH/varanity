@@ -75,8 +75,6 @@ export default (
     if (req.app.isPreview === true && req.app.initialDocumentData) {
       // eslint-disable-next-line no-underscore-dangle
       initialState.previews.data = req.app.initialDocumentData;
-    } else if (req.app.initialDocumentData) {
-      initialState.documents.data = req.app.initialDocumentData;
     }
 
     if (req.app.initialTemplateData) {
@@ -85,6 +83,14 @@ export default (
 
     if (req.app.initialAuthorData) {
       initialState.authors.data = req.app.initialAuthorData;
+    }
+
+    if (req.app.initialPageData) {
+      initialState.documents.data = {...initialState.documents.data, ...req.app.initialPageData};
+    }
+
+    if (req.app.initialArticleData) {
+      initialState.documents.data = {...initialState.documents.data, ...req.app.initialArticleData};
     }
 
     const { store } = createStore({

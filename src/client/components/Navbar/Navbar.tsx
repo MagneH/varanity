@@ -13,19 +13,15 @@ import { RootState } from '../../redux';
 
 // Styles
 import classes from './Navbar.module.scss';
-import url from 'url';
-import { ArticleModel } from '../../pages/Article';
 import { PageModel } from '../../pages/Page';
 
 // Exports
 export const Navbar = ({ language }: { language: string }) => {
   const pages = useSelector<RootState, PageModel[]>(state => {
-    console.log(Object.values(state.documents.data));
     return Object.values(state.documents.data).filter(
       (document: SanityDocument) => document._type === 'page',
     );
   });
-  console.log(pages);
   const location = useLocation();
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -90,7 +86,10 @@ export const Navbar = ({ language }: { language: string }) => {
             >
               {pages.map((page: PageModel) => {
                 return (
-                  <li key={`page-${page._id}`} className={classNames(classes.navbarListItem)}>
+                  <li
+                    key={`page-${page.slug.current}`}
+                    className={classNames(classes.navbarListItem)}
+                  >
                     <NavLink to={`/${language}/pages/${page.slug.current}`}>{page.title}</NavLink>
                   </li>
                 );

@@ -21,8 +21,7 @@ const terminalAnimations = {
 
 // Types
 export type TerminalAnimation = keyof typeof terminalAnimations;
-export interface TerminalProps {
-}
+export interface TerminalProps {}
 
 // Exports
 export const Terminal = () => (

@@ -16,6 +16,13 @@
   flex: 1;
   flex-basis: 5em;
 }
+.postLink {
+  text-decoration: none;
+  color: var(--color-text);
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .postTitle {
   @include open-sans(600);
   text-transform: uppercase;

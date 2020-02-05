@@ -9,19 +9,24 @@ import classes from './LastPostsSection.module.scss';
 import { RootState } from '../../../redux';
 import { ArticleModel } from '../../Article';
 
+interface LastPostsSectionProps {
+  language: string;
+}
+
 // Exports
-export const LastPostsSection = () => {
+export const LastPostsSection = ({ language }: LastPostsSectionProps) => {
   const articles = useSelector<RootState, ArticleModel[]>(state => {
     return Object.values(state.documents.data).filter(
-      (document: SanityDocument) => document._type === 'article' && document.isOnFrontPage === true && !document.isFeatured,
+      (document: SanityDocument) =>
+        document._type === 'article' && document.isOnFrontPage === true && document.isFeatured !== true,
     );
   });
 
   return (
     <Section className={classes.lastPostsSection}>
       <div className={classes.lastPostsSectionGrid}>
-        {articles.map((article) => (
-          <Article article={article} key={`article-${article.slug.current}`}/>
+        {articles.map(article => (
+          <Article article={article} key={`article-${article.slug.current}`} language={language} />
         ))}
       </div>
     </Section>
