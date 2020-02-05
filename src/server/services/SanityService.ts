@@ -49,7 +49,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[slug.current == $slug]{
-          _type, authors[]{author->{bio, image, name, slug, _id}}, slug, title, categories, mainImage, body
+          _type, authors[], slug, title, categories, mainImage, body
         }
       `;
       const params = {
@@ -74,7 +74,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "article"] | order(_createdAt desc) [0..9] {
-          _type, authors[]{author->{bio, image, name, slug, _id}}, slug, title, categories, mainImage, body, isFeatured
+          _type, authors[], slug, title, categories, mainImage, body, isFeatured
         }
       `;
       return this.ServerClient.fetch(query, {});
@@ -86,7 +86,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "page"]{
-          _type, authors[]{author->{bio, image, name, slug}}, slug, title, categories, mainImage, body
+          _type, authors[], slug, title, categories, mainImage, body
         }
       `;
       return this.ServerClient.fetch(query, {});
