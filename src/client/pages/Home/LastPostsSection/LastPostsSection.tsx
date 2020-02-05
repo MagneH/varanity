@@ -21,7 +21,7 @@ export const LastPostsSection = () => {
     <Section className={classes.lastPostsSection}>
       <div className={classes.lastPostsSectionGrid}>
         {articles.map((article) => (
-          <Article article={article} key={`article-${article.slug}`}/>
+          <Article article={article} key={`article-${article.slug.current}`}/>
         ))}
       </div>
     </Section>
