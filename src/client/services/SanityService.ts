@@ -1,4 +1,5 @@
 import Sanity, { InitializedSanityClient, SanityConfigurator } from '@sanity/client';
+import imageUrlBuilder from '@sanity/image-url';
 
 // @ts-ignore
 const sanityClientConfigurator: SanityConfigurator['configurator'] = Sanity;
@@ -13,4 +14,13 @@ const ClientSanityClient: InitializedSanityClient = sanityClientConfigurator({
   useCdn: false, // skip cache layer for faster previews
 });
 
-export { ClientSanityClient, PROJECT_ID, DATASET };
+const builder = imageUrlBuilder({
+  projectId: PROJECT_ID,
+  dataset: DATASET,
+});
+
+const urlFor = (source: string) => {
+  return builder.image(source);
+};
+
+export { ClientSanityClient, PROJECT_ID, DATASET, urlFor };

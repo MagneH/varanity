@@ -70,6 +70,16 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
+  public async getNewestArticles() {
+    if (this.ServerClient && this.initialized) {
+      const query = `
+        *[_type == "article"] | order(_createdAt desc) [0..9]
+      `;
+      return this.ServerClient.fetch(query, {});
+    }
+    throw new Boom.Boom('Client not initialized');
+  }
+
   public async getAllPages() {
     if (this.ServerClient && this.initialized) {
       const query = `

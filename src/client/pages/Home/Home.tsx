@@ -13,10 +13,10 @@ export const Home = ({ language, location }: { language: string; location: Locat
         Home
       </title>
     </Helmet>
-    <TerminalHeader title="varan" subtitle="modern webdev made simple" animation="install" />
+    <TerminalHeader title="varan" subtitle="modern webdev made simple" />
     <Main>
-      <LastPostsSection />
       <FeaturedSection />
+      <LastPostsSection />
     </Main>
   </>
 );

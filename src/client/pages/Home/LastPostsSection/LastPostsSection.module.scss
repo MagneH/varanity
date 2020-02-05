@@ -16,18 +16,18 @@
   }
 }
 
-.featuresSection {
+.lastPostsSection {
   // ----------
   // Overrides
   // ----------
-  --color-background: #{$color-azure-white};
+  --color-background: #{$color-white--100};
 
   // ------
   // Style
   // ------
   background-color: var(--color-background);
 }
-.featuresSectionGrid {
+.lastPostsSectionGrid {
   flex: 1;
   display: grid;
   align-items: start;

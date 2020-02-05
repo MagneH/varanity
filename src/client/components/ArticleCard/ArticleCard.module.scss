@@ -1,7 +1,7 @@
 @import '../../styles/mixins/fonts/open-sans';
 @import '../../styles/mixins/media/screen';
 
-.feature {
+.post {
   display: flex;
   justify-self: center;
   align-self: flex-start;
@@ -11,18 +11,18 @@
   font-size: 0.9em;
   max-width: 24em;
 }
-.featureIcon {
+.postImage {
   display: flex;
   flex: 1;
   flex-basis: 5em;
 }
-.featureTitle {
+.postTitle {
   @include open-sans(600);
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 0;
 }
-.featureSubtitle {
+.postIngress {
   @include open-sans(300);
   font-size: 0.8em;
   text-transform: uppercase;

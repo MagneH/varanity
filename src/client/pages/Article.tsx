@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
-import { SanityDocument } from '@sanity/client';
+import {SanityBlock, SanityDocument} from '@sanity/client';
 import { useDispatch, useSelector } from 'react-redux';
 import url from 'url';
 import { usePreview } from '../hooks/usePreview';
@@ -25,6 +25,9 @@ export interface ArticleProps {
 
 export interface ArticleModel extends SanityDocument {
   title: string;
+  ingress?: SanityBlock;
+  mainImage?: { asset?: {_ref: string } };
+  isFeatured: boolean;
 }
 
 export const Article = ({ isPreview, location, history, match, slug }: ArticleProps) => {

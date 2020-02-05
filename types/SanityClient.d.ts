@@ -29,7 +29,21 @@ declare module '@sanity/client' {
     _id: string;
     _type: string;
     slug: { _type: string; current: string };
+    isOnFrontPage?: boolean;
     [key: string]: any;
+  }
+
+  interface SanityBlock {
+    children: {
+      marks: any;
+      text: string;
+      _key: string;
+      _type: string;
+    };
+    marks: any;
+    text: string;
+    _key: string;
+    _type: string;
   }
 
   interface SubscriptionObserver<T> {

@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
-import {SanityDocument} from "@sanity/client";
+import { SanityDocument } from '@sanity/client';
 import { Link } from '../Link/Link';
 import { NavHamburger } from './NavHamburger/NavHamburger';
 import { NavLink } from './NavLink/NavLink';
@@ -13,15 +13,17 @@ import { RootState } from '../../redux';
 
 // Styles
 import classes from './Navbar.module.scss';
-import url from "url";
-import {ArticleModel} from "../../pages/Article";
-import {PageModel} from "../../pages/Page";
+import url from 'url';
+import { ArticleModel } from '../../pages/Article';
+import { PageModel } from '../../pages/Page';
 
 // Exports
 export const Navbar = ({ language }: { language: string }) => {
   const pages = useSelector<RootState, PageModel[]>(state => {
     console.log(Object.values(state.documents.data));
-    return Object.values(state.documents.data).filter((document: SanityDocument) => document._type === 'page');
+    return Object.values(state.documents.data).filter(
+      (document: SanityDocument) => document._type === 'page',
+    );
   });
   console.log(pages);
   const location = useLocation();
@@ -87,11 +89,11 @@ export const Navbar = ({ language }: { language: string }) => {
               })}
             >
               {pages.map((page: PageModel) => {
-                return(
-                  <li className={classNames(classes.navbarListItem)} key={page._id}>
+                return (
+                  <li key={`page-${page._id}`} className={classNames(classes.navbarListItem)}>
                     <NavLink to={`/${language}/pages/${page.slug.current}`}>{page.title}</NavLink>
                   </li>
-                )
+                );
               })}
             </ul>
           </div>

@@ -22,11 +22,10 @@ const terminalAnimations = {
 // Types
 export type TerminalAnimation = keyof typeof terminalAnimations;
 export interface TerminalProps {
-  animation: TerminalAnimation;
 }
 
 // Exports
-export const Terminal = ({ animation }: TerminalProps) => (
+export const Terminal = () => (
   <div className={classes.terminal}>
     <div className={classes.terminalTopBar}>
       <span
@@ -39,13 +38,5 @@ export const Terminal = ({ animation }: TerminalProps) => (
         className={classNames(classes.terminalTopBarButton, classes.terminalTopBarButtonMaximize)}
       />
     </div>
-    {/* Ugly hack for html 5 video element because of https://github.com/facebook/react/issues/6544 */}
-    <div
-      className={classes.terminalImageContainer}
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{
-        __html: `<video class="${classes.terminalImage}" autoplay loop playsinline muted aria-label="${terminalAnimations[animation].label}"><source src="${terminalAnimations[animation].webm}" type="video/webm" /><source src="${terminalAnimations[animation].mp4}" type="video/mp4" /><track kind="captions" srcLang="en" src="${terminalAnimations[animation].captions}" /></video>`,
-      }}
-    />
   </div>
 );

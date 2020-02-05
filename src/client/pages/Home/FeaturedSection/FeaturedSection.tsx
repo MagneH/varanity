@@ -1,40 +1,33 @@
 import React from 'react';
 import { Section } from '../../../components/Section/Section';
-import { ReactComponent as SuccessIllustration } from '../../../../assets/vector/illustrations/undraw_start_building_vqhd.svg';
-import { Link } from '../../../components/Link/Link';
-import { Emoji } from '../../../components/Emoji/Emoji';
 
 // Styles
 import classes from './FeaturedSection.module.scss';
+import {urlFor} from "../../../services/SanityService";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../redux";
+import {ArticleModel} from "../../Article";
+import {SanityDocument} from "@sanity/client";
 
 // Exports
-export const FeaturedSection = () => (
-  <Section className={classes.getStartedSection}>
-    <h2 className={classes.getStartedSectionTitle}>
-      <Emoji value="🚀" label="Rocket emoji" />
-      Success
-      <Emoji value="🚀" label="Rocket emoji" />
-    </h2>
-    <small className={classes.getStartedSectionSubTitle}>
-      You have successfully set up your varan project. Now the fun can begin.
-    </small>
-    <div className={classes.getStartedSectionDescriptionGrid}>
-      <div className={classes.getStartedSectionDescription}>
-        <h3>Unleash your creativity</h3>
-        <p>
-          To get started, edit the file src/client/pages/Home.tsx and save to observe the magic of
-          hot reloading. Cool huh?
-          <Emoji value="😎" label="Playing it cool emoji" />
-        </p>
-        <p>Now it’s all up to you to make awesome websites!</p>
-        <p>
-          Don’t forget to check out the{' '}
-          <Link to="https://github.com/ersims/varan">documentation</Link> if you get stuck.
-        </p>
-      </div>
-      <div className={classes.getStartedSectionIllustrationContainer}>
-        <SuccessIllustration />
-      </div>
+export const FeaturedSection = () => {
+  const [featuredArticle] = useSelector<RootState, ArticleModel>(state => {
+    return Object.values(state.documents.data).filter(
+      (document: SanityDocument) => document._type === 'article' && document.isFeatured === true,
+    );
+  });
+  const { ingress, title, mainImage } = featuredArticle;
+  return (
+  <Section className={classes.featuredSection}>
+    <div className={classes.featuredSection}>
+      {mainImage && mainImage.asset && mainImage.asset._ref && (
+        <picture className={classes.featuredSectionImage}>
+          <source type="image/webp" srcSet={[urlFor(mainImage.asset._ref).format('webp').width(2000).fit('max').url()]}/>
+          <img src={urlFor(mainImage.asset._ref).width(150).height(150).fit('max').url()} alt=""/>
+        </picture>)
+      }
+      <h2 className={classes.featuredSectionTitle}>{title}</h2>
+      {ingress && <small className={classes.featuredSectionIngress}>{ingress}</small>}
     </div>
   </Section>
-);
+)};
