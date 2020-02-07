@@ -17,12 +17,12 @@ interface ArticleProps {
 export const ArticleComponent = ({ article }: ArticleProps) => {
   const { mainImage } = article;
   const authorList = useSelector<RootState, AuthorModel[]>(state => {
-    return article.authors.map(authorObject => {
+    return article.authors ? article.authors.map(authorObject => {
       if( typeof authorObject.author !== 'undefined') {
         return state.authors.data[authorObject.author._ref]
       }
       return null;
-    }).filter((obj) => { return ![null, undefined].includes(obj) });
+    }).filter((obj: any) => ![null, undefined].includes(obj) ) : [];
   });
   let srcSet = '';
   let src = '';
