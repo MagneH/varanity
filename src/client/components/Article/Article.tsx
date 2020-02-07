@@ -26,7 +26,7 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
   });
   let srcSet = '';
   let src = '';
-  if (typeof mainImage !== 'undefined') {
+  if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
     srcSet =
       urlFor(ensure(mainImage.asset)._ref)
         .format('webp')

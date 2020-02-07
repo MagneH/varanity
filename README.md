@@ -1,6 +1,8 @@
 # Varan boilerplate
 
-A fully fledged offline-first PWA boilerplate for React and TypeScript with server side rendering using [varan](https://github.com/ersims/varan).
+A fully fledged offline-first PWA boilerplate for React and TypeScript with server side rendering using [varan](https://github.com/ersims/varan) and Sanity.
+
+DEMO: [HERE](https://varanity.herokuapp.com/)
 
 Note that these badges are set up for the [source boilerplate master branch](https://github.com/ersims/varan-boilerplate/tree/master) and will not be correct in your own fork of the boilerplate.
 
