@@ -1,4 +1,4 @@
-# Varan boilerplate
+# Varanity boilerplate
 
 A fully fledged offline-first PWA boilerplate for React and TypeScript with server side rendering using [varan](https://github.com/ersims/varan) and Sanity.
 
