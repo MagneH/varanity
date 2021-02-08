@@ -1,8 +1,13 @@
 import { Router } from 'express';
 import { SanityDocument } from '@sanity/client';
 import url from 'url';
+import { handleCategories } from './handleCategories';
 
 const dataFetchRouter = Router();
+
+dataFetchRouter.use((req, res, next) => {
+  handleCategories(req, res, next);
+});
 
 dataFetchRouter.use(async (req, res, next) => {
   const authors = await req.app.services.SanityService.getAllAuthors();
@@ -86,5 +91,9 @@ dataFetchRouter.get('/:language/preview/pages/:pageId', async (req, res, next) =
   }
   next();
 });
+
+dataFetchRouter.get(`/*/:slug`, handleCategories);
+
+dataFetchRouter.get(`/:slug`, handleCategories);
 
 export { dataFetchRouter };

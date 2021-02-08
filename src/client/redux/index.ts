@@ -9,6 +9,7 @@ import * as previews from './modules/previews';
 import * as documents from './modules/documents';
 import * as templates from './modules/templates';
 import * as authors from './modules/authors';
+import * as categories from './modules/categories';
 
 // Register modules
 const modules = {
@@ -18,6 +19,7 @@ const modules = {
   documents,
   templates,
   authors,
+  categories,
 };
 
 // Exports

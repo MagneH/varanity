@@ -4,6 +4,7 @@ import { ActionsObservable, ofType } from 'redux-observable';
 import { ObservableInput } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { SanityDocument } from '@sanity/client';
 import { PageModel } from '../../pages/Page';
 import { ArticleModel } from '../../pages/Article';
 
@@ -13,6 +14,8 @@ import { ArticleModel } from '../../pages/Article';
 export enum ActionTypes {
   GET = 'varanity/documents/GET',
   SET_ONE = 'varanity/documents/SET_ONE',
+  GET_BY_CATEGORY = 'varanity/documents/GET_BY_CATEGORY',
+  SET_BY_CATEGORY = 'varanity/documents/SET_BY_CATEGORY',
 }
 
 /**
@@ -34,6 +37,8 @@ export const initialState: Readonly<DocumentsState> = {
 export const actionCreators = {
   getOne: createAction(ActionTypes.GET)<string>(),
   setOne: createAction(ActionTypes.SET_ONE)<ArticleModel | PageModel>(),
+  getByCategory: createAction(ActionTypes.GET_BY_CATEGORY)<string>(),
+  setByCategory: createAction(ActionTypes.SET_BY_CATEGORY)<ArticleModel[]>(),
 };
 
 /**
@@ -49,6 +54,21 @@ export const reducers = createReducer<DocumentsState, ActionType<typeof actionCr
       nextState.data[action.payload._id] = action.payload;
     }
     return { ...state };
+  })
+  .handleAction(actionCreators.getByCategory, state => ({ ...state }))
+  .handleAction(actionCreators.setByCategory, (state, action) => {
+    const nextState = cloneDeep(state);
+    if (action.payload) {
+      const responseMap = action.payload.reduce(
+        (acc: Record<ArticleModel['slug']['current'], ArticleModel>, cur) => {
+          acc[cur.slug.current] = cur;
+          return acc;
+        },
+        {},
+      );
+      nextState.data = { ...nextState.data, ...responseMap };
+    }
+    return { ...nextState };
   });
 
 /**
@@ -60,10 +80,24 @@ export const epics = {
       ofType(ActionTypes.GET),
       withLatestFrom(state$),
       mergeMap(([action]: { payload: string; meta: { slug: string } }[]) =>
-        ajax.get(`/api/v1/documents/${action.payload}`).pipe(
+        ajax.get(`/api/v1/document/${action.payload}`).pipe(
           map(({ response }) => {
             console.log('Observable: ', response);
-            actionCreators.setOne(response);
+            return actionCreators.setOne(response);
+          }),
+        ),
+      ),
+    ),
+  getDocumentsByCategoryEpic: (action$: ActionsObservable<Action<any>>, state$: ObservableInput<any>) =>
+    action$.pipe(
+      ofType(ActionTypes.GET_BY_CATEGORY),
+      withLatestFrom(state$),
+      mergeMap(([action]: { payload: string; meta: { slug: string } }[]) =>
+        ajax.get(`/api/v1/documents/${action.payload}`).pipe(
+          map((res) => {
+            console.log('Observable: ', res);
+            const { response } = res
+            return actionCreators.setByCategory(response);
           }),
         ),
       ),

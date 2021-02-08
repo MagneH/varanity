@@ -10,6 +10,7 @@ declare global {
       initialPageData: Record<SanityDocument['slug']['current'], SanityDocument>;
       initialArticleData: Record<SanityDocument['slug']['current'], SanityDocument>;
       initialAuthorData: Record<SanityDocument['_id'], SanityDocument>;
+      initialCategoryData: Record<SanityDocument['slug']['current'], SanityDocument>;
       routeSpecificData: any;
       isPreview?: boolean;
     }
