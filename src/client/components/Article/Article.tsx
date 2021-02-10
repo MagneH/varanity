@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from "react-redux";
+import { useSelector } from 'react-redux';
 import { ArticleModel } from '../../pages/Article';
 import { Blocks } from '../Blocks';
 
@@ -8,7 +8,7 @@ import { urlFor } from '../../services/SanityService';
 import { ensure } from '../../lib/ensure';
 import { AuthorModel } from '../../redux/modules/authors';
 import { AuthorCard } from '../Author/AuthorCard';
-import {RootState} from "../../redux";
+import { RootState } from '../../redux';
 
 interface ArticleProps {
   article: ArticleModel;
@@ -17,12 +17,16 @@ interface ArticleProps {
 export const ArticleComponent = ({ article }: ArticleProps) => {
   const { mainImage } = article;
   const authorList = useSelector<RootState, AuthorModel[]>(state => {
-    return article.authors ? article.authors.map(authorObject => {
-      if( typeof authorObject.author !== 'undefined') {
-        return state.authors.data[authorObject.author._ref]
-      }
-      return null;
-    }).filter((obj: any) => ![null, undefined].includes(obj) ) : [];
+    return article.authors
+      ? article.authors
+          .map(authorObject => {
+            if (typeof authorObject.author !== 'undefined') {
+              return state.authors.data[authorObject.author._ref];
+            }
+            return null;
+          })
+          .filter((obj: any) => ![null, undefined].includes(obj))
+      : [];
   });
   let srcSet = '';
   let src = '';
@@ -54,7 +58,7 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
           <h1 className={classes.articleTitle}>{article.title}</h1>
           <ul className={classes.articleAuthorList}>
             {article.authors &&
-            authorList.map((author: AuthorModel) => {
+              authorList.map((author: AuthorModel) => {
                 return (
                   <li key={`${author.slug.current}`}>
                     <AuthorCard author={author} />

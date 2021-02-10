@@ -5,6 +5,7 @@ import { Service } from './Service';
 
 dotenv.config();
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 const sanityClientConfigurator: SanityConfigurator['configurator'] = Sanity;
 
@@ -45,10 +46,37 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
+  public async getCategoriesBySlug() {
+    if (this.ServerClient && this.initialized) {
+      const query = `
+        *[_type == "category"]{
+          _type, _id, slug, title, parent
+        }
+      `;
+      return this.ServerClient.fetch(query, {});
+    }
+    throw new Boom.Boom('Client not initialized');
+  }
+
   public async getArticleBySlug(slug: string) {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[slug.current == $slug]{
+          _type, authors[], slug, title, categories, mainImage, body
+        }
+      `;
+      const params = {
+        slug,
+      };
+      return this.ServerClient.fetch(query, params);
+    }
+    throw new Boom.Boom('Client not initialized');
+  }
+
+  public async getArticlesByCategorySlug(slug: string) {
+    if (this.ServerClient && this.initialized) {
+      const query = `
+        *[references(*[slug.current == $slug]._id)]{
           _type, authors[], slug, title, categories, mainImage, body
         }
       `;

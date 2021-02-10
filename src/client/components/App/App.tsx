@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Helmet } from 'react-helmet-async';
 import { Route, Switch, useLocation, Redirect } from 'react-router';
@@ -21,6 +21,8 @@ import { Home } from '../../pages/Home/Home';
 import { Page, PageProps } from '../../pages/Page';
 import { Article, ArticleProps } from '../../pages/Article';
 import 'react-toastify/dist/ReactToastify.css';
+import useSelector from '../../redux/typedHooks';
+import { ArticleList } from '../../pages/ArticleList';
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('asd-123', { testMode: process.env.NODE_ENV !== 'production' });
@@ -245,6 +247,46 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
           path={`${languageMatch.path}/preview`}
           component={({ match }: { match: { path: any }; location: Location }) => {
             return <PreviewRouter match={match} />;
+          }}
+        />
+        <Route
+          path="/*/:slug"
+          component={({
+            location: routeLocation,
+            match,
+            match: {
+              params: { slug },
+            },
+          }: {
+            match: { params: { slug: string } };
+            location: Location;
+          }): ReactElement => {
+            // Check if this route is a subcategory, if not, forward to article
+            const categoryTree = useSelector(state => state.categories);
+            if (
+              categoryTree &&
+              categoryTree.data &&
+              Object.keys(categoryTree.data).includes(slug)
+            ) {
+              return (
+                <ArticleList
+                  language={language}
+                  match={match}
+                  location={routeLocation}
+                  history={history}
+                  slug={slug}
+                />
+              );
+            }
+            return (
+              <Article
+                language={language}
+                match={match}
+                location={routeLocation}
+                history={history}
+                slug={slug}
+              />
+            );
           }}
         />
       </Switch>

@@ -2,8 +2,14 @@ import { Router } from 'express';
 
 const api = Router();
 
-api.get('/documents/:documentSlug', async (req, res) => {
-  const [result] = await req.app.services.SanityService.getDocumentBySlug(req.params.documentSlug);
+api.get('/document/:documentSlug', async (req, res) => {
+  const [result] = await req.app.services.SanityService.getArticleBySlug(req.params.documentSlug);
+  res.send(result);
+});
+
+api.get('/documents/:categorySlug', async (req, res) => {
+  console.log(req.params.categorySlug)
+  const result = await req.app.services.SanityService.getArticlesByCategorySlug(req.params.categorySlug);
   res.send(result);
 });
 

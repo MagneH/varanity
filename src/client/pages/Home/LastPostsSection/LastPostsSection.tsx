@@ -18,7 +18,9 @@ export const LastPostsSection = ({ language }: LastPostsSectionProps) => {
   const articles = useSelector<RootState, ArticleModel[]>(state => {
     return Object.values(state.documents.data).filter(
       (document: SanityDocument) =>
-        document._type === 'article' && document.isOnFrontPage === true && document.isFeatured !== true,
+        document._type === 'article' &&
+        document.isOnFrontPage === true &&
+        document.isFeatured !== true,
     );
   });
 

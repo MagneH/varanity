@@ -70,6 +70,7 @@ export default (
       previews: { data: {} },
       templates: { data: {} },
       authors: { data: {} },
+      categories: { ...{ data: {} }, ...req.app.initialCategoryData },
     };
     // eslint-disable-next-line no-underscore-dangle
     if (req.app.isPreview === true && req.app.initialDocumentData) {
@@ -86,11 +87,14 @@ export default (
     }
 
     if (req.app.initialPageData) {
-      initialState.documents.data = {...initialState.documents.data, ...req.app.initialPageData};
+      initialState.documents.data = { ...initialState.documents.data, ...req.app.initialPageData };
     }
 
     if (req.app.initialArticleData) {
-      initialState.documents.data = {...initialState.documents.data, ...req.app.initialArticleData};
+      initialState.documents.data = {
+        ...initialState.documents.data,
+        ...req.app.initialArticleData,
+      };
     }
 
     const { store } = createStore({
