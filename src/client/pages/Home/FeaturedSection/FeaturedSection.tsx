@@ -7,6 +7,7 @@ import { urlFor } from '../../../services/SanityService';
 import { Link } from '../../../components/Link/Link';
 import useSelector from '../../../redux/typedHooks';
 import { useCategoryUrl } from '../../../hooks/useCategoryUrl';
+import { ArticleModel } from '../../Article';
 
 interface FeaturedSectionProps {
   language: string;
@@ -20,7 +21,7 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
     );
   });
   const srcSet =
-    featuredArticle && featuredArticle.mainImage.asset
+    featuredArticle && featuredArticle.mainImage && featuredArticle.mainImage
       ? urlFor(featuredArticle.mainImage)
           .withOptions(featuredArticle.mainImage)
           .format('webp')
@@ -29,7 +30,7 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
           .url()
       : '';
   const src =
-    featuredArticle && featuredArticle.mainImage.asset
+    featuredArticle && featuredArticle.mainImage && featuredArticle.mainImage
       ? urlFor(featuredArticle.mainImage)
           .withOptions(featuredArticle.mainImage)
           .width(150)
@@ -38,15 +39,13 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
           .url()
       : '';
 
-  const { mainCategory, slug } = featuredArticle;
+  const { mainCategory, slug } = (featuredArticle as ArticleModel);
   const articleUrl =
     mainCategory && useCategoryUrl(mainCategory && mainCategory._ref, slug.current);
 
   return featuredArticle ? (
     <section className={classes.featuredSection}>
-      {featuredArticle.mainImage &&
-        featuredArticle.mainImage.asset &&
-        featuredArticle.mainImage.asset._ref && (
+      {featuredArticle.mainImage && src && (
           <Link to={`/${language}/${articleUrl}`}>
             <picture className={classes.featuredSectionImageContainer}>
               <source type="image/webp" srcSet={srcSet || ''} />
