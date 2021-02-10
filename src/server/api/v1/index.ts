@@ -8,8 +8,9 @@ api.get('/document/:documentSlug', async (req, res) => {
 });
 
 api.get('/documents/:categorySlug', async (req, res) => {
-  console.log(req.params.categorySlug)
-  const result = await req.app.services.SanityService.getArticlesByCategorySlug(req.params.categorySlug);
+  const result = await req.app.services.SanityService.getArticlesByCategorySlug(
+    req.params.categorySlug,
+  );
   res.send(result);
 });
 

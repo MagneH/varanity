@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
-import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import { SanityDocument } from '@sanity/client';
 import { Link } from '../Link/Link';
@@ -14,18 +13,20 @@ import { RootState } from '../../redux';
 // Styles
 import classes from './Navbar.module.scss';
 import { PageModel } from '../../pages/Page';
+import useSelector from '../../redux/typedHooks';
 
 // Exports
 export const Navbar = ({ language }: { language: string }) => {
-  const pages = useSelector<RootState, PageModel[]>(state => {
+  const pages = useSelector(state => {
     return Object.values(state.documents.data).filter(
       (document: SanityDocument) => document._type === 'page',
     );
   });
+  const categories = useSelector(state => Object.values(state.categories.data));
   const location = useLocation();
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const isApplicationOffline = useSelector<RootState, boolean>(isApplicationOfflineSelector);
+  const isApplicationOffline = useSelector(isApplicationOfflineSelector);
 
   const navbarContentId = 'navbar-list';
   const setSticky = () => setIsSticky(true);
@@ -94,6 +95,16 @@ export const Navbar = ({ language }: { language: string }) => {
                   </li>
                 );
               })}
+              {categories &&
+                categories
+                  .filter(e => e.slug.current === 'categories')
+                  .map(category => (
+                    <li key="categories" className={classNames(classes.navbarListItem)}>
+                      <NavLink to={`/${language}/${category.slug.current}`}>
+                        {category.title}
+                      </NavLink>
+                    </li>
+                  ))}
             </ul>
           </div>
         </CSSTransition>

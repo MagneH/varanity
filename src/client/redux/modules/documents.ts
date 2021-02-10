@@ -82,21 +82,22 @@ export const epics = {
       mergeMap(([action]: { payload: string; meta: { slug: string } }[]) =>
         ajax.get(`/api/v1/document/${action.payload}`).pipe(
           map(({ response }) => {
-            console.log('Observable: ', response);
             return actionCreators.setOne(response);
           }),
         ),
       ),
     ),
-  getDocumentsByCategoryEpic: (action$: ActionsObservable<Action<any>>, state$: ObservableInput<any>) =>
+  getDocumentsByCategoryEpic: (
+    action$: ActionsObservable<Action<any>>,
+    state$: ObservableInput<any>,
+  ) =>
     action$.pipe(
       ofType(ActionTypes.GET_BY_CATEGORY),
       withLatestFrom(state$),
       mergeMap(([action]: { payload: string; meta: { slug: string } }[]) =>
         ajax.get(`/api/v1/documents/${action.payload}`).pipe(
-          map((res) => {
-            console.log('Observable: ', res);
-            const { response } = res
+          map(res => {
+            const { response } = res;
             return actionCreators.setByCategory(response);
           }),
         ),

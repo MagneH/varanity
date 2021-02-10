@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { ArticleModel } from '../../pages/Article';
 import { Blocks } from '../Blocks';
 
@@ -9,14 +8,14 @@ import { ensure } from '../../lib/ensure';
 import { AuthorModel } from '../../redux/modules/authors';
 import { AuthorCard } from '../Author/AuthorCard';
 import { RootState } from '../../redux';
+import useSelector from '../../redux/typedHooks';
 
 interface ArticleProps {
   article: ArticleModel;
 }
 
 export const ArticleComponent = ({ article }: ArticleProps) => {
-  const { mainImage } = article;
-  const authorList = useSelector<RootState, AuthorModel[]>(state => {
+  const authorList = useSelector(state => {
     return article.authors
       ? article.authors
           .map(authorObject => {
@@ -28,20 +27,18 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
           .filter((obj: any) => ![null, undefined].includes(obj))
       : [];
   });
+  const { mainImage } = article;
   let srcSet = '';
   let src = '';
   if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
     srcSet =
-      urlFor(ensure(mainImage.asset)._ref)
+      urlFor(ensure(mainImage))
+        .withOptions({ mainImage })
         .format('webp')
-        .width(2000)
-        .fit('max')
         .url() || '';
     src =
-      urlFor(ensure(mainImage.asset)._ref)
-        .width(150)
-        .height(150)
-        .fit('max')
+      urlFor(mainImage)
+        .withOptions({ mainImage })
         .url() || '';
   }
 
@@ -57,11 +54,11 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
         <div className={classes.articleContent}>
           <h1 className={classes.articleTitle}>{article.title}</h1>
           <ul className={classes.articleAuthorList}>
-            {article.authors &&
-              authorList.map((author: AuthorModel) => {
+            {authorList &&
+              authorList.map(author => {
                 return (
-                  <li key={`${author.slug.current}`}>
-                    <AuthorCard author={author} />
+                  <li key={`${(author as AuthorModel).slug.current}`}>
+                    <AuthorCard author={author as AuthorModel} />
                   </li>
                 );
               })}

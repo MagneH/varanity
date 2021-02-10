@@ -3,9 +3,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import { SanityDocument } from '@sanity/client';
 
 export interface CategoryModel extends SanityDocument {
-  slug: any;
-  title: any;
-  parent: string;
+  slug: { current: string; _type: string };
+  title: string;
+  parent: { _ref: string };
 }
 
 /**
