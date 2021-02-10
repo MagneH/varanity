@@ -108,7 +108,6 @@ interface PreviewProps {
 }
 
 const PreviewRouter = ({ match }: PreviewProps) => {
-  console.log(match);
   return (
     <>
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}

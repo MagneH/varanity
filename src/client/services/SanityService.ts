@@ -1,6 +1,8 @@
 import Sanity, { InitializedSanityClient, SanityConfigurator } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
+import { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 const sanityClientConfigurator: SanityConfigurator['configurator'] = Sanity;
 
@@ -19,7 +21,7 @@ const builder = imageUrlBuilder({
   dataset: DATASET,
 });
 
-const urlFor = (source: string) => {
+const urlFor = (source: SanityImageSource) => {
   return builder.image(source);
 };
 

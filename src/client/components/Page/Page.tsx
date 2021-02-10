@@ -32,13 +32,15 @@ export const PageComponent = ({ page }: PageProps) => {
   let src = '';
   if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
     srcSet =
-      urlFor(ensure(mainImage.asset)._ref)
+      urlFor(mainImage)
+        .withOptions(mainImage)
         .format('webp')
         .width(2000)
         .fit('max')
         .url() || '';
     src =
-      urlFor(ensure(mainImage.asset)._ref)
+      urlFor(mainImage)
+        .withOptions(mainImage)
         .width(150)
         .height(150)
         .fit('max')

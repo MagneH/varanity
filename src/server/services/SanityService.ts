@@ -27,7 +27,7 @@ class SanityService extends Service {
           projectId: PROJECT_ID,
           dataset: DATASET,
           token: PREVIEW_TOKEN,
-          useCdn: true,
+          useCdn: false,
         });
         this.initialized = true;
       } catch (err) {
@@ -50,7 +50,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "category"]{
-          _type, _id, slug, title, parent
+          _type, _id, slug, title, parent, mainImage->
         }
       `;
       return this.ServerClient.fetch(query, {});
@@ -62,7 +62,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[slug.current == $slug]{
-          _type, authors[], slug, title, categories, mainImage, body
+          _type, authors[], slug, title, categories, mainCategory, mainImage->, body
         }
       `;
       const params = {
@@ -77,7 +77,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[references(*[slug.current == $slug]._id)]{
-          _type, authors[], slug, title, categories, mainImage, body
+          _type, authors[], slug, title, categories, mainCategory, mainImage->, body
         }
       `;
       const params = {
@@ -102,7 +102,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "article"] | order(_createdAt desc) [0..9] {
-          _type, authors[], slug, title, categories, mainImage, body, isFeatured
+          _type, authors[], slug, title, categories, mainCategory, mainImage->, body, isFeatured
         }
       `;
       return this.ServerClient.fetch(query, {});
@@ -114,7 +114,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "page"]{
-          _type, authors[], slug, title, categories, mainImage, body
+          _type, authors[], slug, title, categories, mainImage->, body
         }
       `;
       return this.ServerClient.fetch(query, {});
