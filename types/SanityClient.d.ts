@@ -4,9 +4,9 @@ declare module '@sanity/client' {
   }
   export interface InitializedSanityClient {
     getUrl: (url: string) => string;
-    getDocument: (id: string) => SanityDocument;
+    getDocument: (id: string) => Promise<SanityDocument[]>;
     request: (options: RequestOptions) => Promise<string>;
-    fetch: (query: string, params: { [key: string]: any }) => Promise<SanityDocument>;
+    fetch: (query: string, params: { [key: string]: any }) => Promise<SanityDocument[]>;
     listen: (query: string, params: { [key: string]: any }) => Observable;
     config: () => ClientConfig;
   }

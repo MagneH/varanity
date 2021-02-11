@@ -1,10 +1,9 @@
 import { Action, ActionType, createAction, createReducer } from 'typesafe-actions';
 import cloneDeep from 'lodash/cloneDeep';
 import { ActionsObservable, ofType } from 'redux-observable';
-import { ObservableInput } from 'rxjs';
+import { Observable, ObservableInput } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
-import { SanityDocument } from '@sanity/client';
 import { PageModel } from '../../pages/Page';
 import { ArticleModel } from '../../pages/Article';
 
@@ -47,7 +46,7 @@ export const actionCreators = {
 export const reducers = createReducer<DocumentsState, ActionType<typeof actionCreators>>(
   initialState,
 )
-  .handleAction(actionCreators.getOne, state => ({ ...state }))
+  .handleAction(actionCreators.getOne, (state) => ({ ...state }))
   .handleAction(actionCreators.setOne, (state, action) => {
     const nextState = cloneDeep(state);
     if (action.payload && action.payload._id) {
@@ -55,7 +54,7 @@ export const reducers = createReducer<DocumentsState, ActionType<typeof actionCr
     }
     return { ...state };
   })
-  .handleAction(actionCreators.getByCategory, state => ({ ...state }))
+  .handleAction(actionCreators.getByCategory, (state) => ({ ...state }))
   .handleAction(actionCreators.setByCategory, (state, action) => {
     const nextState = cloneDeep(state);
     if (action.payload) {
@@ -66,7 +65,7 @@ export const reducers = createReducer<DocumentsState, ActionType<typeof actionCr
         },
         {},
       );
-      nextState.data = { ...nextState.data, ...responseMap };
+      nextState.data = { ...state.data, ...responseMap };
     }
     return { ...nextState };
   });
@@ -75,28 +74,29 @@ export const reducers = createReducer<DocumentsState, ActionType<typeof actionCr
  * Epics
  */
 export const epics = {
-  getDocumentEpic: (action$: ActionsObservable<Action<any>>, state$: ObservableInput<any>) =>
+  getDocumentEpic: (
+    action$: ActionsObservable<Action<any>>,
+    state$: ObservableInput<any>,
+  ): Observable<ActionType<any>> =>
     action$.pipe(
       ofType(ActionTypes.GET),
       withLatestFrom(state$),
       mergeMap(([action]: { payload: string; meta: { slug: string } }[]) =>
-        ajax.get(`/api/v1/document/${action.payload}`).pipe(
-          map(({ response }) => {
-            return actionCreators.setOne(response);
-          }),
-        ),
+        ajax
+          .get(`/api/v1/document/${action.payload}`)
+          .pipe(map(({ response }) => actionCreators.setOne(response))),
       ),
     ),
   getDocumentsByCategoryEpic: (
     action$: ActionsObservable<Action<any>>,
     state$: ObservableInput<any>,
-  ) =>
+  ): Observable<ActionType<any>> =>
     action$.pipe(
       ofType(ActionTypes.GET_BY_CATEGORY),
       withLatestFrom(state$),
       mergeMap(([action]: { payload: string; meta: { slug: string } }[]) =>
         ajax.get(`/api/v1/documents/${action.payload}`).pipe(
-          map(res => {
+          map((res) => {
             const { response } = res;
             return actionCreators.setByCategory(response);
           }),

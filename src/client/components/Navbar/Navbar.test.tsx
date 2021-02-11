@@ -25,7 +25,7 @@ beforeEach(() => {
   Waypoint.below = 'below';
 });
 it('should be nav', () => {
-  const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+  const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
   // Assertions
   expect(container.querySelector('nav')).toBeInTheDocument();
@@ -33,7 +33,7 @@ it('should be nav', () => {
 });
 describe('stickyness', () => {
   it('should not be sticky by default', () => {
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Assertions
     expect(container.querySelector('.mocked-sticky-menu')).not.toBeInTheDocument();
@@ -43,7 +43,7 @@ describe('stickyness', () => {
       onPositionChange({ currentPosition: Waypoint.below });
       return 'mocked-waypoint';
     });
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Assertions
     expect(container.querySelector('.mocked-sticky-menu')).not.toBeInTheDocument();
@@ -53,19 +53,19 @@ describe('stickyness', () => {
       onPositionChange({ currentPosition: Waypoint.above });
       return 'mocked-waypoint';
     });
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Assertions
     expect(container.querySelector('.mocked-sticky-menu')).toBeInTheDocument();
   });
   it('should become sticky if navbar is no longer fully visible in viewport', () => {
-    let onLeaveRef: Function;
+    let onLeaveRef: () => void;
     WaypointMock.mockImplementation(({ onLeave }) => {
       onLeaveRef = onLeave;
       return 'mocked-waypoint';
     });
 
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Mock scrolling
     act(() => {
@@ -77,14 +77,14 @@ describe('stickyness', () => {
     expect(container.querySelector('.mocked-sticky-menu')).toBeInTheDocument();
   });
   it('should become unsticky if navbar becomes fully visible in viewport', () => {
-    let onEnterRef: Function;
+    let onEnterRef: () => void;
     WaypointMock.mockImplementation(({ onEnter, onPositionChange }) => {
       onEnterRef = onEnter;
       onPositionChange({ currentPosition: Waypoint.above, previousPosition: Waypoint.below });
       return 'mocked-waypoint';
     });
 
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Mock scrolling
     act(() => {
@@ -99,14 +99,14 @@ describe('stickyness', () => {
 describe('offline status', () => {
   it('should not be on when application is online', () => {
     isOfflineMock.mockReturnValue(false);
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Assertions
     expect(container.querySelector('.mocked-offline-menu')).not.toBeInTheDocument();
   });
   it('should be on when application is offline', () => {
     isOfflineMock.mockReturnValue(true);
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Assertions
     expect(container.querySelector('.mocked-offline-menu')).toBeInTheDocument();
@@ -115,19 +115,21 @@ describe('offline status', () => {
 });
 describe('hamburger', () => {
   it('should have menu hamburger button', () => {
-    const { getByLabelText } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { getByLabelText } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Assertions
     expect(getByLabelText('Menu')).toBeInTheDocument();
   });
   it('should not be open by default', () => {
-    const { container } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
     // Assertions
     expect(container.querySelector('.mocked-expanded-hamburger-menu')).not.toBeInTheDocument();
   });
   it('should open when Menu button is clicked', () => {
-    const { container, getByLabelText } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container, getByLabelText } = render(<Navbar language="en" />, {
+      wrapper: MemoryRouter,
+    });
 
     // Click
     fireEvent.click(getByLabelText('Menu'));
@@ -137,7 +139,9 @@ describe('hamburger', () => {
     expect(container.querySelector('.mocked-expanded-hamburger-menu')).toBeVisible();
   });
   it('should close when Menu button is clicked twice', () => {
-    const { container, getByLabelText } = render(<Navbar />, { wrapper: MemoryRouter });
+    const { container, getByLabelText } = render(<Navbar language="en" />, {
+      wrapper: MemoryRouter,
+    });
 
     // Click
     fireEvent.click(getByLabelText('Menu'));
@@ -150,7 +154,7 @@ describe('hamburger', () => {
 describe('links', () => {
   describe('/', () => {
     it('should have link to home page', () => {
-      const { getByText } = render(<Navbar />, { wrapper: MemoryRouter });
+      const { getByText } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
       // Assertions
       expect(getByText('Home')).toBeInTheDocument();
@@ -160,7 +164,7 @@ describe('links', () => {
       const history = createMemoryHistory({ initialEntries: ['/initial'] });
       const { getByText } = render(
         <Router history={history}>
-          <Navbar />
+          <Navbar language="en" />
         </Router>,
       );
 
@@ -173,7 +177,7 @@ describe('links', () => {
   });
   describe('/examples', () => {
     it('should have link to examples page', () => {
-      const { getByText } = render(<Navbar />, { wrapper: MemoryRouter });
+      const { getByText } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
       // Assertions
       expect(getByText('Examples')).toBeInTheDocument();
@@ -183,7 +187,7 @@ describe('links', () => {
       const history = createMemoryHistory({ initialEntries: ['/initial'] });
       const { getByText } = render(
         <Router history={history}>
-          <Navbar />
+          <Navbar language="en" />
         </Router>,
       );
 
@@ -196,7 +200,7 @@ describe('links', () => {
   });
   describe('github', () => {
     it('should have external link to github', () => {
-      const { getByText } = render(<Navbar />, { wrapper: MemoryRouter });
+      const { getByText } = render(<Navbar language="en" />, { wrapper: MemoryRouter });
 
       // Assertions
       expect(getByText('GitHub')).toBeInTheDocument();

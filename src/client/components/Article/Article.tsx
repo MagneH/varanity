@@ -7,7 +7,6 @@ import { urlFor } from '../../services/SanityService';
 import { ensure } from '../../lib/ensure';
 import { AuthorModel } from '../../redux/modules/authors';
 import { AuthorCard } from '../Author/AuthorCard';
-import { RootState } from '../../redux';
 import useSelector from '../../redux/typedHooks';
 
 interface ArticleProps {
@@ -15,31 +14,24 @@ interface ArticleProps {
 }
 
 export const ArticleComponent = ({ article }: ArticleProps) => {
-  const authorList = useSelector(state => {
-    return article.authors
+  const authorList = useSelector((state) =>
+    article.authors
       ? article.authors
-          .map(authorObject => {
+          .map((authorObject) => {
             if (typeof authorObject.author !== 'undefined') {
               return state.authors.data[authorObject.author._ref];
             }
             return null;
           })
           .filter((obj: any) => ![null, undefined].includes(obj))
-      : [];
-  });
+      : [],
+  );
   const { mainImage } = article;
   let srcSet = '';
   let src = '';
   if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
-    srcSet =
-      urlFor(ensure(mainImage))
-        .withOptions({ mainImage })
-        .format('webp')
-        .url() || '';
-    src =
-      urlFor(mainImage)
-        .withOptions({ mainImage })
-        .url() || '';
+    srcSet = urlFor(ensure(mainImage)).withOptions({ mainImage }).format('webp').url() || '';
+    src = urlFor(mainImage).withOptions({ mainImage }).url() || '';
   }
 
   return article ? (
@@ -55,13 +47,11 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
           <h1 className={classes.articleTitle}>{article.title}</h1>
           <ul className={classes.articleAuthorList}>
             {authorList &&
-              authorList.map(author => {
-                return (
-                  <li key={`${(author as AuthorModel).slug.current}`}>
-                    <AuthorCard author={author as AuthorModel} />
-                  </li>
-                );
-              })}
+              authorList.map((author) => (
+                <li key={`${(author as AuthorModel).slug.current}`}>
+                  <AuthorCard author={author as AuthorModel} />
+                </li>
+              ))}
           </ul>
           {article.body && (
             <div className={classes.articleContent}>

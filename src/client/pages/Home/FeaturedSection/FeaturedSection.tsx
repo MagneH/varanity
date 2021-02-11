@@ -16,27 +16,18 @@ interface FeaturedSectionProps {
 
 // Exports
 export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
-  const featuredArticle = useSelector(state => {
-    return Object.values(state.documents.data).find(
+  const featuredArticle = useSelector((state) =>
+    Object.values(state.documents.data).find(
       (document: SanityDocument) => document.isFeatured === true,
-    );
-  }) || {mainImage: undefined, title: ''};
-
-  console.log(featuredArticle);
+    ),
+  ) || { mainImage: undefined, title: '' };
 
   const { mainImage } = featuredArticle;
   let srcSet = '';
   let src = '';
   if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
-    srcSet =
-      urlFor(ensure(mainImage))
-        .withOptions({ mainImage })
-        .format('webp')
-        .url() || '';
-    src =
-      urlFor(mainImage)
-        .withOptions({ mainImage })
-        .url() || '';
+    srcSet = urlFor(ensure(mainImage)).withOptions({ mainImage }).format('webp').url() || '';
+    src = urlFor(mainImage).withOptions({ mainImage }).url() || '';
   }
 
   const { mainCategory, slug, ingress } = featuredArticle as ArticleModel;

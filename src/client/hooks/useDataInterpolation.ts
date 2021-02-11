@@ -12,14 +12,13 @@ const replacerCurry = (data: Record<string, string>) => (intpl = '') => {
 
 const interpolator = (string: string, data: Record<string, string>) => {
   const matches = string.match(/\${([A-z]*)}/gm) || [];
-  return matches.reduce((prev, curr) => {
-    return prev.replace(curr, replacerCurry(data));
-  }, string);
+  return matches.reduce((prev, curr) => prev.replace(curr, replacerCurry(data)), string);
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const interpolate = (value: any, data: Record<string, string>): any => {
   if (Array.isArray(value)) {
-    return value.map(v => interpolate(v, data));
+    return value.map((v) => interpolate(v, data));
   }
   if (typeof value === 'object') {
     if (/(string|span)/.test(value._type)) {
@@ -42,7 +41,6 @@ export const interpolate = (value: any, data: Record<string, string>): any => {
 
 export const useDataInterpolation = (
   document: SanityDocument,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data: any,
-): SanityDocumentWithDataModel => {
-  return useMemo(() => interpolate(document, data), [document, data]);
-};
+): SanityDocumentWithDataModel => useMemo(() => interpolate(document, data), [document, data]);

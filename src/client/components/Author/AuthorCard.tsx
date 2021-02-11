@@ -7,13 +7,11 @@ interface AuthorCardProps {
   author: AuthorModel;
 }
 
-export const AuthorCard = ({ author }: AuthorCardProps) => {
-  return (
-    <div className={classes.authorCard}>
-      <AuthorPicture image={author.image} />
-      <div className={classes.authorInfoContainer}>
-        <p className={classes.authorName}>{author.name}</p>
-      </div>
+export const AuthorCard = ({ author }: AuthorCardProps) => (
+  <div className={classes.authorCard}>
+    <AuthorPicture image={author.image} />
+    <div className={classes.authorInfoContainer}>
+      <p className={classes.authorName}>{author.name}</p>
     </div>
-  );
-};
+  </div>
+);

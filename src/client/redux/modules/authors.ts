@@ -44,7 +44,7 @@ export const actionCreators = {
 export const reducers = createReducer<DocumentsState, ActionType<typeof actionCreators>>(
   initialState,
 )
-  .handleAction(actionCreators.getOne, state => ({ ...state }))
+  .handleAction(actionCreators.getOne, (state) => ({ ...state }))
   .handleAction(actionCreators.setOne, (state, action) => {
     const nextState = cloneDeep(state);
     if (action.payload && action.payload._id) {

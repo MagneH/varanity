@@ -1,6 +1,7 @@
 import React from 'react';
 import { RequestHandler } from 'express';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { HelmetProvider, FilledContext } from 'react-helmet-async';
 import { StaticRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -49,7 +50,7 @@ export default (
     bundleCss: ApplicationAsset[];
   }>(
     (acc, [k, v]) => {
-      (Array.isArray(v) ? v : [v]).forEach(f => {
+      (Array.isArray(v) ? v : [v]).forEach((f) => {
         if (f.endsWith('.js')) acc.bundleJs.push(getApplicationAsset(assets[`${k}.js`]));
         else if (f.endsWith('.css')) acc.bundleCss.push(getApplicationAsset(assets[`${k}.css`]));
       });
@@ -59,7 +60,7 @@ export default (
   );
 
   // Fetch preloaded assets
-  const preloadedAssets = preload.map(f => assets[f]);
+  const preloadedAssets = preload.map((f) => assets[f]);
 
   // Return react rendering middleware
   return async function renderReact(req, res) {
@@ -108,14 +109,18 @@ export default (
       url?: string;
       statusCode?: number;
     } = {};
+
+    const sheet = new ServerStyleSheet();
     const body = renderToString(
-      <Provider store={store}>
-        <HelmetProvider context={helmetContext}>
-          <StaticRouter location={req.url} context={routerContext}>
-            <App />
-          </StaticRouter>
-        </HelmetProvider>
-      </Provider>,
+      <StyleSheetManager sheet={sheet.instance}>
+        <Provider store={store}>
+          <HelmetProvider context={helmetContext}>
+            <StaticRouter location={req.url} context={routerContext}>
+              <App />
+            </StaticRouter>
+          </HelmetProvider>
+        </Provider>
+      </StyleSheetManager>,
     );
     const { helmet } = helmetContext as FilledContext;
     const html = `<!DOCTYPE html>${renderToStaticMarkup(
@@ -125,7 +130,12 @@ export default (
         title={helmet.title.toComponent()}
         meta={helmet.meta.toComponent()}
         link={helmet.link.toComponent()}
-        style={helmet.style.toComponent()}
+        style={
+          <>
+            {helmet.style.toComponent()}
+            {sheet.getStyleElement()}
+          </>
+        }
         script={helmet.script.toComponent()}
         noscript={helmet.noscript.toComponent()}
         base={helmet.base.toComponent()}
@@ -136,6 +146,8 @@ export default (
         initialState={initialState}
       />,
     )}`;
+
+    sheet.seal();
 
     if (routerContext.url) {
       if (routerContext.statusCode !== undefined) res.status(routerContext.statusCode);

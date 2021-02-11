@@ -6,6 +6,7 @@ import { urlFor } from '../../services/SanityService';
 import { ArticleModel } from '../../pages/Article';
 import { Link } from '../Link/Link';
 import { useCategoryUrl } from '../../hooks/useCategoryUrl';
+import { ensure } from '../../lib/ensure';
 
 // Types
 interface ArticleProps {
@@ -17,34 +18,27 @@ export const Article = ({ article, language }: ArticleProps) => {
   const { ingress, title, mainImage, slug, mainCategory } = article;
 
   const articleUrl = useCategoryUrl(mainCategory && mainCategory._ref, slug.current);
+
+  let srcSet = '';
+  let src = '';
+  if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
+    srcSet =
+      urlFor(ensure(mainImage))
+        .withOptions({ mainImage })
+        .width(300)
+        .height(250)
+        .format('webp')
+        .url() || '';
+    src = urlFor(mainImage).withOptions({ mainImage }).width(300).height(250).url() || '';
+  }
+
   return (
     <div className={classes.post}>
-      {article && mainImage && mainImage.asset && mainImage.asset._ref && (
+      {article && mainImage && (
         <Link to={`/${language}/${articleUrl}`}>
           <picture className={classes.postImage}>
-            <source
-              type="image/webp"
-              srcSet={
-                urlFor(mainImage)
-                  .withOptions(mainImage)
-                  .format('webp')
-                  .width(300)
-                  .height(250)
-                  .fit('max')
-                  .url() || undefined
-              }
-            />
-            <img
-              src={
-                urlFor(mainImage)
-                  .withOptions(mainImage)
-                  .width(150)
-                  .height(150)
-                  .fit('max')
-                  .url() || undefined
-              }
-              alt=""
-            />
+            <source type="image/webp" srcSet={srcSet} />
+            <img src={src} alt="" />
           </picture>
         </Link>
       )}

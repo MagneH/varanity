@@ -9,7 +9,7 @@ beforeEach(() => {
   jest.restoreAllMocks();
   jest.resetModules();
 });
-it('should use memory history if window is not available', async done => {
+it('should use memory history if window is not available', async (done) => {
   expect.assertions(2);
 
   // Set window to undefined - simulate usage from Node
@@ -18,7 +18,7 @@ it('should use memory history if window is not available', async done => {
     'window',
     'get',
   );
-  windowSpy.mockImplementation(() => undefined);
+  windowSpy.mockImplementation(undefined);
 
   const { createMemoryHistory } = await import('history');
   const { routerHistory } = await import('./routerHistory');
@@ -30,7 +30,7 @@ it('should use memory history if window is not available', async done => {
   // Done
   done();
 });
-it('should use browser history if window is available', async done => {
+it('should use browser history if window is available', async (done) => {
   expect.assertions(2);
 
   const { createBrowserHistory } = await import('history');

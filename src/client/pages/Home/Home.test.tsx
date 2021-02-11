@@ -4,10 +4,10 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Home } from './Home';
 
 // Tests
-it('should have correct page title', async done => {
+it('should have correct page title', async (done) => {
   render(
     <HelmetProvider>
-      <Home language="en" location={window.location} />
+      <Home language="en" />
     </HelmetProvider>,
   );
 

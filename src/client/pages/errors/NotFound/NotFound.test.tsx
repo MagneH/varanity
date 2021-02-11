@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router';
 import { NotFound } from './NotFound';
 
 // Tests
-it('should have correct page title', async done => {
+it('should have correct page title', async (done) => {
   render(
     <HelmetProvider>
       <NotFound />

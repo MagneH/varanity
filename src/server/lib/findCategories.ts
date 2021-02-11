@@ -1,9 +1,9 @@
 export const findCategoriesByProperty = (
-  obj: any,
-  property: any,
-  parentList?: any,
+  obj: Record<string, string[]>,
+  property: string,
+  parentList?: Record<string, { url: string }>,
   parent?: string,
-) => {
+): Record<string, any> => {
   let items: Record<string, any> = {};
   if (!obj[property]) return items;
 

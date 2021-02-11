@@ -60,8 +60,7 @@ export const createStore = (preloadedState = {}): { store: Store; history: Histo
   // Enable hot reloading
   if (process.env.NODE_ENV === 'development' && module.hot) {
     module.hot.accept('./index', () => {
-      // eslint-disable-next-line global-require
-      store.replaceReducer(require('./index').rootReducer);
+      store.replaceReducer(rootReducer);
     });
   }
 

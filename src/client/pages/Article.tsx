@@ -3,12 +3,8 @@ import Helmet from 'react-helmet';
 import { SanityBlock, SanityDocument } from '@sanity/client';
 import { useDispatch } from 'react-redux';
 import url from 'url';
-import {
-  ImageUrlBuilderOptionsWithAliases,
-  SanityImageCrop,
-  SanityImageHotspot,
-  SanityImageObject,
-} from '@sanity/image-url/lib/types/types';
+import { ImageUrlBuilderOptionsWithAliases } from '@sanity/image-url/lib/types/types';
+import { RouteComponentProps } from 'react-router';
 import { usePreview } from '../hooks/usePreview';
 import { ArticleComponent } from '../components/Article/Article';
 
@@ -23,7 +19,7 @@ export interface ArticleProps {
   isPreview?: boolean;
   isDraft?: boolean;
   location: Location;
-  history: History;
+  history: RouteComponentProps['history'];
   match: any;
   language: string;
   slug: string;
@@ -36,10 +32,11 @@ export interface ArticleModel extends SanityDocument {
   mainImage?: Partial<ImageUrlBuilderOptionsWithAliases>;
   authors: { author: AuthorModel }[];
   isFeatured: boolean;
+  _createdAt: string;
 }
 
-export const Article = ({ isPreview, location, history, match, slug, language }: ArticleProps) => {
-  const article = useSelector(state => {
+export const Article = ({ isPreview, location, history, match, slug }: ArticleProps) => {
+  const article = useSelector((state) => {
     if (isPreview) {
       const { query } = url.parse(location.search, true);
       const id = query.isDraft === 'true' ? `drafts.${match.params.id}` : `${match.params.id}`;

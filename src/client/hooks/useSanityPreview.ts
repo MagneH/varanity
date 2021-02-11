@@ -1,18 +1,20 @@
 import { useEffect } from 'react';
-import { ClientSanityClient } from '../services/SanityService';
 import { useDispatch } from 'react-redux';
+import { SanityDocument } from '@sanity/client';
+import { ClientSanityClient } from '../services/SanityService';
 
 const useSanityPreview = (
   id: string,
-  cb: Function,
+  cb: (newVersion: SanityDocument) => any,
   isViewingDraft: boolean,
-  toastEdit: Function,
-  toastPublish: Function,
-) => {
+  toastEdit: () => any,
+  toastPublish: () => any,
+): void => {
   let draftId: string;
   let publishedId: string;
   if (id.includes('drafts')) {
     draftId = id;
+    // eslint-disable-next-line prefer-destructuring
     publishedId = id.split('drafts.')[1];
   } else {
     draftId = `drafts.${id}`;
@@ -34,7 +36,6 @@ const useSanityPreview = (
 
     const draftSub = ClientSanityClient.listen(query, draftParams).subscribe(({ result }) => {
       if (result) {
-        console.log('Listener received draft:', result, cb);
         dispatch(cb(result));
         toastEdit();
       }

@@ -6,9 +6,9 @@ import { RefObject, useEffect } from 'react';
 const useOutsideAlerter = (
   ref: RefObject<HTMLDivElement>,
   isEnabled: boolean,
-  cb: Function,
+  cb: () => any,
   exceptionRefs: RefObject<HTMLDivElement>[],
-) => {
+): void => {
   /**
    * Alert if clicked on outside of element
    */

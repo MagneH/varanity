@@ -1,14 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { PageModel } from '../../pages/Page';
 import { Blocks } from '../Blocks';
 
 import classes from './Page.module.scss';
 import { urlFor } from '../../services/SanityService';
-import { ensure } from '../../lib/ensure';
 import { AuthorModel } from '../../redux/modules/authors';
 import { AuthorCard } from '../Author/AuthorCard';
-import { RootState } from '../../redux';
+import useSelector from '../../redux/typedHooks';
 
 interface PageProps {
   page: PageModel;
@@ -16,8 +14,8 @@ interface PageProps {
 
 export const PageComponent = ({ page }: PageProps) => {
   const { mainImage } = page;
-  const authorList = useSelector<RootState, AuthorModel[]>(state => {
-    return page.authors
+  const authorList = useSelector((state) =>
+    page.authors
       ? page.authors
           .map((authorObject: any | null) => {
             if (typeof authorObject.author !== 'undefined') {
@@ -26,25 +24,14 @@ export const PageComponent = ({ page }: PageProps) => {
             return null;
           })
           .filter((obj: any) => ![null, undefined].includes(obj))
-      : [];
-  });
+      : [],
+  );
   let srcSet = '';
   let src = '';
   if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
     srcSet =
-      urlFor(mainImage)
-        .withOptions(mainImage)
-        .format('webp')
-        .width(2000)
-        .fit('max')
-        .url() || '';
-    src =
-      urlFor(mainImage)
-        .withOptions(mainImage)
-        .width(150)
-        .height(150)
-        .fit('max')
-        .url() || '';
+      urlFor(mainImage).withOptions(mainImage).format('webp').width(2000).fit('max').url() || '';
+    src = urlFor(mainImage).withOptions(mainImage).width(150).height(150).fit('max').url() || '';
   }
 
   return page ? (
@@ -60,13 +47,11 @@ export const PageComponent = ({ page }: PageProps) => {
           <h1 className={classes.pageTitle}>{page.title}</h1>
           <ul className={classes.pageAuthorList}>
             {page.authors &&
-              authorList.map((author: AuthorModel) => {
-                return (
-                  <li key={`${author.slug.current}`}>
-                    <AuthorCard author={author} />
-                  </li>
-                );
-              })}
+              authorList.map((author: AuthorModel) => (
+                <li key={`${author.slug.current}`}>
+                  <AuthorCard author={author} />
+                </li>
+              ))}
           </ul>
           {page.body && (
             <div className={classes.pageContent}>

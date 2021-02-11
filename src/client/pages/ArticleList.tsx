@@ -3,6 +3,7 @@ import Helmet from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import { SanityDocument } from '@sanity/client';
 
+import { RouteComponentProps } from 'react-router';
 import { actionCreators as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
 import useSelector from '../redux/typedHooks';
@@ -19,27 +20,27 @@ import { Category } from '../components/CategoryCard/CategoryCard';
 // Types
 export interface CategoryListProps {
   location: Location;
-  history: History;
+  history: RouteComponentProps['history'];
   match: any;
   language: string;
   slug: string;
 }
 
-export const ArticleList = ({ location, history, match, slug, language }: CategoryListProps) => {
+export const ArticleList = ({ location, slug, language }: CategoryListProps) => {
   const [isFetched, setIsFetched] = useState(false);
-  const category = useSelector(state => state.categories.data[slug]);
+  const category = useSelector((state) => state.categories.data[slug]);
   const childCategories = useSelector(
-    state =>
+    (state) =>
       category &&
       Object.values(state.categories.data)
-        .filter(e => e.parent && e.parent._ref === category._id)
+        .filter((e) => e.parent && e.parent._ref === category._id)
         .sort((e1, e2) => e1.title.localeCompare(e2.title)),
   );
 
-  const articles = useSelector(state =>
+  const articles = useSelector((state) =>
     Object.values(state.documents.data)
       .filter(
-        document =>
+        (document) =>
           document &&
           document.categories &&
           document.categories.some((e: SanityDocument) => e._ref === category._id),
@@ -68,12 +69,8 @@ export const ArticleList = ({ location, history, match, slug, language }: Catego
         .fit('max')
         .url() || '';
     src =
-      urlFor(ensure(mainImage))
-        .withOptions(mainImage)
-        .width(150)
-        .height(150)
-        .fit('max')
-        .url() || '';
+      urlFor(ensure(mainImage)).withOptions(mainImage).width(150).height(150).fit('max').url() ||
+      '';
   }
 
   return category ? (
@@ -95,7 +92,7 @@ export const ArticleList = ({ location, history, match, slug, language }: Catego
             <h1>{category.title}</h1>
             <h2>Categories</h2>
             <div className={classes.lastPostsSectionGrid}>
-              {childCategories.map(childCategory => (
+              {childCategories.map((childCategory) => (
                 <Category
                   category={childCategory}
                   key={`childCategory-${childCategory.slug.current}`}
@@ -109,7 +106,7 @@ export const ArticleList = ({ location, history, match, slug, language }: Catego
           <Section className={classes.lastPostsSection}>
             <h2>Articles</h2>
             <div className={classes.lastPostsSectionGrid}>
-              {articles.map(article => (
+              {articles.map((article) => (
                 <Article
                   article={article as ArticleModel}
                   key={`article-${article.slug.current}`}

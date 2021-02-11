@@ -43,7 +43,7 @@ dataFetchRouter.use(async (req, res, next) => {
     ...req.app.initialArticleData,
     ...articles.reduce(
       (acc: Record<SanityDocument['slug']['current'], SanityDocument>, cur: SanityDocument) => {
-        acc[cur.slug.current] = { ...cur, isOnFrontPage: true };
+        acc[cur.slug.current] = { ...cur };
         return acc;
       },
       {},

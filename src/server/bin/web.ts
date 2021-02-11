@@ -2,9 +2,6 @@
 import 'source-map-support/register';
 import dotenv from 'dotenv';
 
-dotenv.config();
-
-/* eslint-disable import/first */
 import express from 'express';
 import compression from 'compression';
 import fs from 'fs';
@@ -15,7 +12,8 @@ import { services } from '../services';
 import { Service } from '../services/Service';
 import { api } from '../api/v1';
 import { dataFetchRouter } from '../dataFetchRouter';
-/* eslint-enable import/first */
+
+dotenv.config();
 
 // Hot reloading
 if (module.hot) {
@@ -67,6 +65,7 @@ async function main() {
   app.request.app.services = initializedServices.services;
 
   // Log initialization status to console
+  // eslint-disable-next-line no-console
   console.table(initializedServices.initializationStatus);
 
   // Serve static files and attempt to serve .gz files if found

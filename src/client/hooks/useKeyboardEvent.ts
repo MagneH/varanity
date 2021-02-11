@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export const useKeyboardEvent = (key: string, callback: Function): void => {
+export const useKeyboardEvent = (key: string, callback: () => any): void => {
   useEffect((): (() => void) => {
     if (typeof window !== 'undefined') {
       const handler = (event: KeyboardEvent): void => {

@@ -1,14 +1,16 @@
 import React, { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Helmet } from 'react-helmet-async';
-import { Route, Switch, useLocation, Redirect } from 'react-router';
+import { Route, Switch, useLocation, Redirect, RouteComponentProps } from 'react-router';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import ReactGA from 'react-ga';
 import ttiPolyfill from 'tti-polyfill';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import favicon from '../../../assets/favicon.ico';
 import { Navbar } from '../Navbar/Navbar';
 import { Footer } from '../Footer/Footer';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 // Styles
 import classes from './App.module.scss';
@@ -20,7 +22,7 @@ import webmanifest from '../../../assets/manifest.webmanifest';
 import { Home } from '../../pages/Home/Home';
 import { Page, PageProps } from '../../pages/Page';
 import { Article, ArticleProps } from '../../pages/Article';
-import 'react-toastify/dist/ReactToastify.css';
+
 import useSelector from '../../redux/typedHooks';
 import { ArticleList } from '../../pages/ArticleList';
 
@@ -64,7 +66,7 @@ export const App = hot(() => {
                   history,
                 }: {
                   match: { path: string; params: { language: string } };
-                  history: History;
+                  history: RouteComponentProps['history'];
                   location: Location;
                 }) => {
                   const {
@@ -93,7 +95,7 @@ export const App = hot(() => {
 interface LanguageRouterProps {
   language: string;
   languageMatch: any;
-  history: History & { listen?: (cb: (location: Location) => any) => () => void };
+  history: RouteComponentProps['history'];
 }
 
 export const TrackerContext = React.createContext<{
@@ -108,55 +110,60 @@ interface PreviewProps {
   };
 }
 
-const PreviewRouter = ({ match }: PreviewProps) => {
-  return (
-    <>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <Route
-        path={`${match.path}/pages/:id`}
-        component={({ isDraft, location, history, match: pagePreviewMatch, language, slug }: PageProps) => {
-          return (
-            <Page
-              isDraft={isDraft}
-              location={location}
-              history={history}
-              match={pagePreviewMatch}
-              language={language}
-              slug={slug}
-              isPreview
-            />
-          );
-        }}
-      />
-      <Route
-        path={`${match.path}/articles/:id`}
-        component={({
-                    isDraft,
-                    location,
-                    history,
-                    match: articlePreviewMatch,
-                    language,
-                    slug}: ArticleProps) => (
-          <Article
-            isDraft={isDraft}
-            location={location}
-            history={history}
-            match={articlePreviewMatch}
-            language={language}
-            slug={slug}
-            isPreview
-          />
-        )}
-      />
-    </>
-  )};
+const PreviewRouter = ({ match }: PreviewProps) => (
+  <>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+    <Route
+      path={`${match.path}/pages/:id`}
+      component={({
+        isDraft,
+        location,
+        history,
+        match: pagePreviewMatch,
+        language,
+        slug,
+      }: PageProps) => (
+        <Page
+          isDraft={isDraft}
+          location={location}
+          history={history}
+          match={pagePreviewMatch}
+          language={language}
+          slug={slug}
+          isPreview
+        />
+      )}
+    />
+    <Route
+      path={`${match.path}/articles/:id`}
+      component={({
+        isDraft,
+        location,
+        history,
+        match: articlePreviewMatch,
+        language,
+        slug,
+      }: ArticleProps) => (
+        <Article
+          isDraft={isDraft}
+          location={location}
+          history={history}
+          match={articlePreviewMatch}
+          language={language}
+          slug={slug}
+          isPreview
+        />
+      )}
+    />
+  </>
+);
 
 const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProps) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
 
   useEffect(() => {
     if (history && history.listen) {
-      return history.listen(newLocation => {
+      return history.listen((newLocation) => {
         ReactGA.set({ page: newLocation.pathname });
         ReactGA.pageview(newLocation.pathname);
       });
@@ -167,7 +174,7 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
 
   useEffect(() => {
     const callback = (list: PerformanceObserverEntryList) => {
-      (list.getEntries() as PerformanceNavigationTiming[]).forEach(entry => {
+      (list.getEntries() as PerformanceNavigationTiming[]).forEach((entry) => {
         ReactGA.timing({
           category: 'Load Performace',
           variable: 'Server Latency',
@@ -196,7 +203,7 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
   }, []);
 
   useEffect(() => {
-    ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
+    ttiPolyfill.getFirstConsistentlyInteractive().then((tti) => {
       if (tti) {
         ReactGA.timing({
           category: 'Load Performace',
@@ -219,15 +226,7 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
         <Route
           exact
           path={`${languageMatch.path}/`}
-          component={({
-            location: routeLocation,
-          }: {
-            match: { params: any };
-            location: Location;
-            language: string;
-          }) => {
-            return <Home language={language} location={routeLocation} />;
-          }}
+          component={() => <Home language={language} />}
         />
         <Route
           path={`${languageMatch.path}/pages/:pageSlug`}
@@ -237,17 +236,15 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
           }: {
             match: { params: any };
             location: Location;
-          }) => {
-            return (
-              <Page
-                language={language}
-                match={pageMatch}
-                location={routeLocation}
-                history={history}
-                slug={pageMatch.params.pageSlug}
-              />
-            );
-          }}
+          }) => (
+            <Page
+              language={language}
+              match={pageMatch}
+              location={routeLocation}
+              history={history}
+              slug={pageMatch.params.pageSlug}
+            />
+          )}
         />
         <Route
           path={`${languageMatch.path}/articles/:articleSlug`}
@@ -257,23 +254,21 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
           }: {
             match: { params: any };
             location: Location;
-          }) => {
-            return (
-              <Article
-                language={language}
-                match={articleMatch}
-                location={routeLocation}
-                history={history}
-                slug={articleMatch.params.articleSlug}
-              />
-            );
-          }}
+          }) => (
+            <Article
+              language={language}
+              match={articleMatch}
+              location={routeLocation}
+              history={history}
+              slug={articleMatch.params.articleSlug}
+            />
+          )}
         />
         <Route
           path={`${languageMatch.path}/preview`}
-          component={({ match: previewMatch }: { match: { path: any }; location: Location }) => {
-            return <PreviewRouter match={previewMatch} />;
-          }}
+          component={({ match: previewMatch }: { match: { path: any }; location: Location }) => (
+            <PreviewRouter match={previewMatch} />
+          )}
         />
         <Route
           path="/*/:slug"
@@ -284,11 +279,13 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
               params: { slug },
             },
           }: {
+            // eslint-disable-next-line react/no-unused-prop-types
             match: { params: { slug: string } };
+            // eslint-disable-next-line react/no-unused-prop-types
             location: Location;
           }): ReactElement => {
             // Check if this route is a subcategory, if not, forward to article
-            const categoryTree = useSelector(state => state.categories);
+            const categoryTree = useSelector((state) => state.categories);
             if (
               categoryTree &&
               categoryTree.data &&
@@ -316,7 +313,7 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
           }}
         />
       </Switch>
-      <Footer language={language} />
+      <Footer />
     </TrackerContext.Provider>
   );
 };

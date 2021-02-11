@@ -1,2 +1,3 @@
 // Exports
-export const isUrlExternal = (url: string) => url.startsWith('//') || /^\w+:\/\//i.test(url);
+export const isUrlExternal = (url: string): boolean =>
+  url.startsWith('//') || /^\w+:\/\//i.test(url);

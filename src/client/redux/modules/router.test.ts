@@ -1,4 +1,5 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { Action } from 'history';
 import { reducers } from './router';
 
 // Tests
@@ -13,7 +14,7 @@ describe('reducers', () => {
   describe('LOCATION_CHANGE', () => {
     it('should not mutate state', () => {
       const state = {
-        action: 'POP' as 'POP',
+        action: 'POP' as Action,
         location: { pathname: '/', search: '', hash: '', state: undefined, query: {} },
       };
 
@@ -42,7 +43,7 @@ describe('reducers', () => {
     });
     it('should update state with new location', () => {
       const state = {
-        action: 'POP' as 'POP',
+        action: 'POP' as const,
         location: { pathname: '/', search: '', hash: '', state: undefined, query: {} },
       };
 
