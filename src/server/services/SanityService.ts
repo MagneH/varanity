@@ -1,11 +1,15 @@
-import Sanity, { InitializedSanityClient, SanityConfigurator } from '@sanity/client';
+import Sanity, {
+  InitializedSanityClient,
+  SanityConfigurator,
+  SanityDocument,
+} from '@sanity/client';
 import Boom from '@hapi/boom';
 import dotenv from 'dotenv';
 import { Service } from './Service';
 
 dotenv.config();
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const sanityClientConfigurator: SanityConfigurator['configurator'] = Sanity;
 
@@ -38,7 +42,7 @@ class SanityService extends Service {
     }
   }
 
-  public async getDocumentById(id: string, isDraft: string) {
+  public async getDocumentById(id: string, isDraft: string): Promise<SanityDocument[]> {
     if (this.ServerPreviewClient && this.initialized) {
       const query = isDraft === 'true' ? `drafts.${id}` : id;
       return this.ServerPreviewClient.getDocument(query);
@@ -46,7 +50,7 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getCategoriesBySlug() {
+  public async getCategoriesBySlug(): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "category"]{
@@ -58,11 +62,11 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getArticleBySlug(slug: string) {
+  public async getArticleBySlug(slug: string): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[slug.current == $slug]{
-          _type, authors[], slug, title, categories, mainCategory, mainImage, body
+          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isOnFrontPage, isFeatured, _updatedAt
         }
       `;
       const params = {
@@ -73,11 +77,11 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getArticlesByCategorySlug(slug: string) {
+  public async getArticlesByCategorySlug(slug: string): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[references(*[slug.current == $slug]._id)]{
-          _type, authors[], slug, title, categories, mainCategory, mainImage, body
+          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
         }
       `;
       const params = {
@@ -88,7 +92,7 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getAllAuthors() {
+  public async getAllAuthors(): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "author"]{bio, image, name, slug, _id}
@@ -98,11 +102,11 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getNewestArticles() {
+  public async getNewestArticles(): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "article"] | order(_createdAt desc) [0..9] {
-          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured
+          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
         }
       `;
       return this.ServerClient.fetch(query, {});
@@ -110,11 +114,11 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getAllPages() {
+  public async getAllPages(): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "page"]{
-          _type, authors[], slug, title, categories, mainImage, body
+          _type, authors[], slug, title, categories, mainImage, body, _updatedAt
         }
       `;
       return this.ServerClient.fetch(query, {});
@@ -122,7 +126,7 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getAllTemplateDocuments() {
+  public async getAllTemplateDocuments(): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "templates"]

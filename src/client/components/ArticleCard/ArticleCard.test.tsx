@@ -14,6 +14,7 @@ it('should render title', () => {
         mainCategory: { _ref: '123', _type: 'category' },
         authors: [],
         isFeatured: true,
+        _createdAt: '2021-01-11T17:10:50.339Z',
       }}
       language="en"
     />,

@@ -15,19 +15,8 @@ export const AuthorPicture = ({ image }: AuthorPictureProps) => {
   let src = '';
   if (typeof image !== 'undefined') {
     srcSet =
-      urlFor(ensure(image))
-        .withOptions(image)
-        .format('webp')
-        .width(2000)
-        .fit('max')
-        .url() || '';
-    src =
-      urlFor(ensure(image))
-        .withOptions(image)
-        .width(150)
-        .height(150)
-        .fit('max')
-        .url() || '';
+      urlFor(ensure(image)).withOptions(image).format('webp').width(2000).fit('max').url() || '';
+    src = urlFor(ensure(image)).withOptions(image).width(150).height(150).fit('max').url() || '';
   }
   return (
     <>

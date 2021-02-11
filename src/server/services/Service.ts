@@ -1,6 +1,6 @@
 class Service {
   public initialized = false;
-  public init() {
+  public init(): Service {
     this.initialized = true;
     return this;
   }

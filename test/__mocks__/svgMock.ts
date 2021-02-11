@@ -1,1 +1,1 @@
-export const ReactComponent = () => 'svg-mock';
+export const ReactComponent = (): string => 'svg-mock';

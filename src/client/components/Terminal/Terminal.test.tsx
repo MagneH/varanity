@@ -4,21 +4,21 @@ import { Terminal } from './Terminal';
 
 // Tests
 it('video should be muted', () => {
-  const { container } = render(<Terminal animation="install" />);
+  const { container } = render(<Terminal />);
 
   // Assertions
   expect(container.querySelector('video[muted]')).toBeInTheDocument();
 });
 describe('install animation', () => {
   it('should have webm and mp4 video sources', () => {
-    const { container } = render(<Terminal animation="install" />);
+    const { container } = render(<Terminal />);
 
     // Assertions
     expect(container.querySelector('source[type="video/webm"]')).toBeInTheDocument();
     expect(container.querySelector('source[type="video/mp4"]')).toBeInTheDocument();
   });
   it('should have accessible label', () => {
-    const { getByLabelText } = render(<Terminal animation="install" />);
+    const { getByLabelText } = render(<Terminal />);
 
     // Assertions
     expect(getByLabelText('Installing varan through terminal')).toBeInTheDocument();

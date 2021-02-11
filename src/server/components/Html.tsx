@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { HTMLAttributes } from 'react';
 import serialize from 'serialize-javascript';
 
 // Interface
@@ -14,15 +15,15 @@ export interface HtmlProps {
   script: React.ReactNode;
   noscript: React.ReactNode;
   base: React.ReactNode;
-  htmlAttributes: object;
-  bodyAttributes: object;
+  htmlAttributes?: HTMLAttributes<HTMLHtmlElement>;
+  bodyAttributes?: HTMLAttributes<HTMLBodyElement>;
   bundleJs: (string | Asset)[];
   bundleCss: (string | Asset)[];
-  body: string;
-  initialState?: object;
+  body?: string;
+  initialState?: Record<string, unknown>;
   manifest?: string | Asset;
-  preload: (string | Asset)[];
-  baseUrl: string;
+  preload?: (string | Asset)[];
+  baseUrl?: string;
 }
 
 // Helpers
@@ -32,8 +33,8 @@ function isAssetObject(asset: string | Asset): asset is Asset {
 
 // Exports
 export const Html = ({
-  htmlAttributes,
-  bodyAttributes,
+  htmlAttributes = {},
+  bodyAttributes = {},
   title,
   meta,
   link,
@@ -41,13 +42,13 @@ export const Html = ({
   script,
   noscript,
   base,
-  body,
+  body = '',
   bundleJs,
   bundleCss,
   initialState,
   manifest,
-  preload,
-  baseUrl,
+  preload = [],
+  baseUrl = '/',
 }: HtmlProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <html lang="en" {...htmlAttributes}>
@@ -63,13 +64,13 @@ export const Html = ({
             rel="manifest"
             href={manifest.src}
             integrity={manifest.integrity}
-            crossOrigin="anonymous"
+            crossOrigin="use-credentials"
           />
         ) : (
-          <link rel="manifest" href={manifest} crossOrigin="anonymous" />
+          <link rel="manifest" href={manifest} crossOrigin="use-credentials" />
         ))}
       {link}
-      {preload.map(asset => {
+      {preload.map((asset) => {
         const { src, integrity = undefined } = isAssetObject(asset) ? asset : { src: asset };
         if (/\.js$/.test(src)) {
           return (
@@ -79,7 +80,7 @@ export const Html = ({
               rel="preload"
               as="script"
               integrity={integrity}
-              crossOrigin="anonymous"
+              crossOrigin="use-credentials"
             />
           );
         }
@@ -91,7 +92,7 @@ export const Html = ({
               rel="preload"
               as="style"
               integrity={integrity}
-              crossOrigin="anonymous"
+              crossOrigin="use-credentials"
             />
           );
         }
@@ -103,7 +104,7 @@ export const Html = ({
               rel="preload"
               as="font"
               integrity={integrity}
-              crossOrigin="anonymous"
+              crossOrigin="use-credentials"
             />
           );
         }
@@ -115,23 +116,23 @@ export const Html = ({
               rel="preload"
               as="image"
               integrity={integrity}
-              crossOrigin="anonymous"
+              crossOrigin="use-credentials"
             />
           );
         }
         return null;
       })}
-      {bundleCss.map(css =>
+      {bundleCss.map((css) =>
         isAssetObject(css) ? (
           <link
             key={css.src}
             integrity={css.integrity}
             href={css.src}
             rel="stylesheet"
-            crossOrigin="anonymous"
+            crossOrigin="use-credentials"
           />
         ) : (
-          <link key={css} href={css} rel="stylesheet" crossOrigin="anonymous" />
+          <link key={css} href={css} rel="stylesheet" crossOrigin="use-credentials" />
         ),
       )}
       {style}
@@ -153,7 +154,7 @@ export const Html = ({
           }}
         />
       )}
-      {bundleJs.map(js =>
+      {bundleJs.map((js) =>
         isAssetObject(js) ? (
           <script
             key={js.src}
@@ -161,7 +162,7 @@ export const Html = ({
             src={js.src}
             integrity={js.integrity}
             defer
-            crossOrigin="anonymous"
+            crossOrigin="use-credentials"
           />
         ) : (
           <script key={js} type="text/javascript" src={js} defer crossOrigin="anonymous" />
@@ -170,10 +171,3 @@ export const Html = ({
     </body>
   </html>
 );
-Html.defaultProps = {
-  htmlAttributes: {},
-  bodyAttributes: {},
-  body: '',
-  preload: [],
-  baseUrl: '/',
-};

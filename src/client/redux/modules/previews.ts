@@ -36,7 +36,7 @@ export const actionCreators = {
  * Reducers
  */
 export const reducers = createReducer<PreviewState, ActionType<typeof actionCreators>>(initialState)
-  .handleAction(actionCreators.getOne, state => ({ ...state }))
+  .handleAction(actionCreators.getOne, (state) => ({ ...state }))
   .handleAction(actionCreators.setOne, (state, action) => {
     const nextState = cloneDeep(state);
     if (action.payload && action.payload._id) {

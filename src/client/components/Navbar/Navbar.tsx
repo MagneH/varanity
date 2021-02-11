@@ -8,7 +8,6 @@ import { Link } from '../Link/Link';
 import { NavHamburger } from './NavHamburger/NavHamburger';
 import { NavLink } from './NavLink/NavLink';
 import { isApplicationOfflineSelector } from '../../redux/modules/application';
-import { RootState } from '../../redux';
 
 // Styles
 import classes from './Navbar.module.scss';
@@ -17,12 +16,12 @@ import useSelector from '../../redux/typedHooks';
 
 // Exports
 export const Navbar = ({ language }: { language: string }) => {
-  const pages = useSelector(state => {
-    return Object.values(state.documents.data).filter(
+  const pages = useSelector((state) =>
+    Object.values(state.documents.data).filter(
       (document: SanityDocument) => document._type === 'page',
-    );
-  });
-  const categories = useSelector(state => Object.values(state.categories.data));
+    ),
+  );
+  const categories = useSelector((state) => Object.values(state.categories.data));
   const location = useLocation();
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +30,7 @@ export const Navbar = ({ language }: { language: string }) => {
   const navbarContentId = 'navbar-list';
   const setSticky = () => setIsSticky(true);
   const unsetSticky = () => setIsSticky(false);
-  const toggleMenu = () => setIsOpen(prevState => !prevState);
+  const toggleMenu = () => setIsOpen((prevState) => !prevState);
   const handleInitialPosition = ({ currentPosition, previousPosition }: Waypoint.CallbackArgs) => {
     if (!previousPosition && currentPosition === Waypoint.above) setSticky();
   };
@@ -85,20 +84,18 @@ export const Navbar = ({ language }: { language: string }) => {
                 [classes.navbarListContentExpanded]: isOpen,
               })}
             >
-              {pages.map((page: PageModel) => {
-                return (
-                  <li
-                    key={`page-${page.slug.current}`}
-                    className={classNames(classes.navbarListItem)}
-                  >
-                    <NavLink to={`/${language}/pages/${page.slug.current}`}>{page.title}</NavLink>
-                  </li>
-                );
-              })}
+              {pages.map((page: PageModel) => (
+                <li
+                  key={`page-${page.slug.current}`}
+                  className={classNames(classes.navbarListItem)}
+                >
+                  <NavLink to={`/${language}/pages/${page.slug.current}`}>{page.title}</NavLink>
+                </li>
+              ))}
               {categories &&
                 categories
-                  .filter(e => e.slug.current === 'categories')
-                  .map(category => (
+                  .filter((e) => e.slug.current === 'categories')
+                  .map((category) => (
                     <li key="categories" className={classNames(classes.navbarListItem)}>
                       <NavLink to={`/${language}/${category.slug.current}`}>
                         {category.title}

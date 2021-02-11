@@ -5,7 +5,7 @@ import { Emoji } from '../Emoji/Emoji';
 import classes from './Footer.module.scss';
 
 // Exports
-export const Footer = ({ language }: { language: string }) => (
+export const Footer = () => (
   <footer className={classes.footer}>
     <p className={classes.footerDescription}>
       Made with
