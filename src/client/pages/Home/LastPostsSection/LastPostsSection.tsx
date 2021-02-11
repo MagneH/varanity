@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { SanityDocument } from '@sanity/client';
 import { Section } from '../../../components/Section/Section';
 import { Article } from '../../../components/ArticleCard/ArticleCard';
 
 // Styles
 import classes from './LastPostsSection.module.scss';
-import { RootState } from '../../../redux';
+import useSelector from '../../../redux/typedHooks';
 import { ArticleModel } from '../../Article';
 
 interface LastPostsSectionProps {
@@ -15,7 +14,7 @@ interface LastPostsSectionProps {
 
 // Exports
 export const LastPostsSection = ({ language }: LastPostsSectionProps) => {
-  const articles = useSelector<RootState, ArticleModel[]>(state => {
+  const articles = useSelector(state => {
     return Object.values(state.documents.data).filter(
       (document: SanityDocument) =>
         document._type === 'article' &&
@@ -28,7 +27,11 @@ export const LastPostsSection = ({ language }: LastPostsSectionProps) => {
     <Section className={classes.lastPostsSection}>
       <div className={classes.lastPostsSectionGrid}>
         {articles.map(article => (
-          <Article article={article} key={`article-${article.slug.current}`} language={language} />
+          <Article
+            article={article as ArticleModel}
+            key={`article-${article.slug.current}`}
+            language={language}
+          />
         ))}
       </div>
     </Section>

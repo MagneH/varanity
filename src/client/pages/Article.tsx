@@ -3,10 +3,14 @@ import Helmet from 'react-helmet';
 import { SanityBlock, SanityDocument } from '@sanity/client';
 import { useDispatch } from 'react-redux';
 import url from 'url';
-import { SanityImageCrop, SanityImageHotspot } from '@sanity/image-url/lib/types/types';
+import {
+  ImageUrlBuilderOptionsWithAliases,
+  SanityImageCrop,
+  SanityImageHotspot,
+  SanityImageObject,
+} from '@sanity/image-url/lib/types/types';
 import { usePreview } from '../hooks/usePreview';
 import { ArticleComponent } from '../components/Article/Article';
-import { RootState } from '../redux';
 
 import { actionCreators as previewActions } from '../redux/modules/previews';
 import { actionCreators as documentActions } from '../redux/modules/documents';
@@ -22,19 +26,14 @@ export interface ArticleProps {
   history: History;
   match: any;
   language: string;
-  slug: { current: string; _type: string };
+  slug: string;
 }
 
 export interface ArticleModel extends SanityDocument {
   title: string;
   ingress?: SanityBlock;
   mainCategory: { _ref: string; _type: string };
-  mainImage?: {
-    asset?: { _ref: string };
-    alt: string;
-    crop: SanityImageCrop;
-    hotspot: SanityImageHotspot;
-  };
+  mainImage?: Partial<ImageUrlBuilderOptionsWithAliases>;
   authors: { author: AuthorModel }[];
   isFeatured: boolean;
 }
@@ -43,7 +42,7 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
   const article = useSelector(state => {
     if (isPreview) {
       const { query } = url.parse(location.search, true);
-      const id = query.isDraft == 'true' ? `drafts.${match.params.id}` : `${match.params.id}`;
+      const id = query.isDraft === 'true' ? `drafts.${match.params.id}` : `${match.params.id}`;
       return state.previews.data[id];
     }
     return state.documents.data[slug];
@@ -52,8 +51,7 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
   // eslint-disable-next-line no-underscore-dangle
   if (isPreview) {
     const { query } = url.parse(location.search, true);
-    const id = query.isDraft == 'true' ? `drafts.${match.params.id}` : `${match.params.id}`;
-    previewActions.setOne({ title: '', _id: '', _type: '', slug: '' });
+    const id = query.isDraft === 'true' ? `drafts.${match.params.id}` : `${match.params.id}`;
     usePreview(location, history, id, previewActions.setOne);
   }
 
@@ -75,7 +73,7 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
         </title>
       </Helmet>
       <Main>
-        <ArticleComponent article={article} />
+        <ArticleComponent article={article as ArticleModel} />
       </Main>
     </>
   ) : (

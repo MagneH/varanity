@@ -5,7 +5,6 @@ import classes from './ArticleCard.module.scss';
 import { urlFor } from '../../services/SanityService';
 import { ArticleModel } from '../../pages/Article';
 import { Link } from '../Link/Link';
-import { CategoryModel } from '../../redux/modules/categories';
 import { useCategoryUrl } from '../../hooks/useCategoryUrl';
 
 // Types
@@ -18,7 +17,6 @@ export const Article = ({ article, language }: ArticleProps) => {
   const { ingress, title, mainImage, slug, mainCategory } = article;
 
   const articleUrl = useCategoryUrl(mainCategory && mainCategory._ref, slug.current);
-  console.log(mainCategory && mainCategory._ref, slug.current);
   return (
     <div className={classes.post}>
       {article && mainImage && mainImage.asset && mainImage.asset._ref && (
@@ -26,23 +24,25 @@ export const Article = ({ article, language }: ArticleProps) => {
           <picture className={classes.postImage}>
             <source
               type="image/webp"
-              srcSet={[
+              srcSet={
                 urlFor(mainImage)
                   .withOptions(mainImage)
                   .format('webp')
                   .width(300)
                   .height(250)
                   .fit('max')
-                  .url(),
-              ]}
+                  .url() || undefined
+              }
             />
             <img
-              src={urlFor(mainImage)
-                .withOptions(mainImage)
-                .width(150)
-                .height(150)
-                .fit('max')
-                .url()}
+              src={
+                urlFor(mainImage)
+                  .withOptions(mainImage)
+                  .width(150)
+                  .height(150)
+                  .fit('max')
+                  .url() || undefined
+              }
               alt=""
             />
           </picture>

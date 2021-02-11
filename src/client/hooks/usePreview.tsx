@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import querystring from 'querystring';
 import cloneDeep from 'lodash/cloneDeep';
+import { MemoryHistory } from 'history';
 import { useSanityPreview } from './useSanityPreview';
 import { ToastMessage } from '../components/ToastMessage';
 
-const usePreview = (location: Location, history: History, id: string, updateState: Function) => {
+const usePreview = (location: Location, history: MemoryHistory, id: string, updateState: Function) => {
   const { isDraft } = url.parse(location.search, true).query;
   const [isViewingDraft, setIsViewingDraft] = useState(isDraft === 'true');
   const [shouldToastEdits, setShouldToastEdits] = useState(false);
