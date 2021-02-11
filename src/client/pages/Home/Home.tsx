@@ -13,7 +13,6 @@ export const Home = ({ language, location }: { language: string; location: Locat
         Home
       </title>
     </Helmet>
-    <TerminalHeader title="varan" subtitle="modern webdev made simple" />
     <Main>
       <FeaturedSection language={language} />
       <LastPostsSection language={language} />

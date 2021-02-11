@@ -7,7 +7,7 @@ import { Home } from './Home';
 it('should have correct page title', async done => {
   render(
     <HelmetProvider>
-      <Home />
+      <Home language="en" location={window.location} />
     </HelmetProvider>,
   );
 

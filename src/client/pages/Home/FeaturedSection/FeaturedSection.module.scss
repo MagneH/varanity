@@ -62,6 +62,21 @@
     height: 0;
   }
 }
+
+.articleMainImageContainer {
+  flex: 1;
+  flex-basis: 5em;
+  min-width: 100%;
+  width: 100%;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+  source {
+    height: 0;
+  }
+}
+
 .featuredSectionTitle {
   @include open-sans(600);
   text-transform: uppercase;

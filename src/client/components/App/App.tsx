@@ -99,6 +99,7 @@ interface LanguageRouterProps {
 export const TrackerContext = React.createContext<{
   initialLoadedProp: boolean;
   setInitialLoadedProp: Dispatch<SetStateAction<boolean>>;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
 }>({ initialLoadedProp: false, setInitialLoadedProp: () => {} });
 
 interface PreviewProps {
@@ -113,20 +114,44 @@ const PreviewRouter = ({ match }: PreviewProps) => {
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Route
         path={`${match.path}/pages/:id`}
-        component={(props: PageProps) => {
-          return <Page {...props} isPreview />;
+        component={({ isDraft, location, history, match: pagePreviewMatch, language, slug }: PageProps) => {
+          return (
+            <Page
+              isDraft={isDraft}
+              location={location}
+              history={history}
+              match={pagePreviewMatch}
+              language={language}
+              slug={slug}
+              isPreview
+            />
+          );
         }}
       />
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Route
         path={`${match.path}/articles/:id`}
-        component={(props: ArticleProps) => <Article {...props} isPreview />}
+        component={({
+                    isDraft,
+                    location,
+                    history,
+                    match: articlePreviewMatch,
+                    language,
+                    slug}: ArticleProps) => (
+          <Article
+            isDraft={isDraft}
+            location={location}
+            history={history}
+            match={articlePreviewMatch}
+            language={language}
+            slug={slug}
+            isPreview
+          />
+        )}
       />
     </>
-  );
-};
+  )};
 
-export const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProps) => {
+const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProps) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
 
   useEffect(() => {
@@ -136,6 +161,7 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
         ReactGA.pageview(newLocation.pathname);
       });
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
 
@@ -165,6 +191,7 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
       observer.observe({ entryTypes: ['navigation'] });
       return () => observer.disconnect();
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
 
@@ -205,7 +232,7 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
         <Route
           path={`${languageMatch.path}/pages/:pageSlug`}
           component={({
-            match,
+            match: pageMatch,
             location: routeLocation,
           }: {
             match: { params: any };
@@ -214,10 +241,10 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
             return (
               <Page
                 language={language}
-                match={match}
+                match={pageMatch}
                 location={routeLocation}
                 history={history}
-                slug={match.params.pageSlug}
+                slug={pageMatch.params.pageSlug}
               />
             );
           }}
@@ -225,7 +252,7 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
         <Route
           path={`${languageMatch.path}/articles/:articleSlug`}
           component={({
-            match,
+            match: articleMatch,
             location: routeLocation,
           }: {
             match: { params: any };
@@ -234,25 +261,25 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
             return (
               <Article
                 language={language}
-                match={match}
+                match={articleMatch}
                 location={routeLocation}
                 history={history}
-                slug={match.params.articleSlug}
+                slug={articleMatch.params.articleSlug}
               />
             );
           }}
         />
         <Route
           path={`${languageMatch.path}/preview`}
-          component={({ match }: { match: { path: any }; location: Location }) => {
-            return <PreviewRouter match={match} />;
+          component={({ match: previewMatch }: { match: { path: any }; location: Location }) => {
+            return <PreviewRouter match={previewMatch} />;
           }}
         />
         <Route
           path="/*/:slug"
           component={({
             location: routeLocation,
-            match,
+            match: slugMatch,
             match: {
               params: { slug },
             },
@@ -270,7 +297,7 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
               return (
                 <ArticleList
                   language={language}
-                  match={match}
+                  match={slugMatch}
                   location={routeLocation}
                   history={history}
                   slug={slug}
@@ -280,7 +307,7 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
             return (
               <Article
                 language={language}
-                match={match}
+                match={slugMatch}
                 location={routeLocation}
                 history={history}
                 slug={slug}
