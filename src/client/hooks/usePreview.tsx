@@ -32,30 +32,33 @@ const usePreview = (
   );
 
   const notifyOfEditing = () =>
-    toast(() => (
-      <ToastMessage
-        switchToDraft={() => {
-          setIsViewingDraft(true);
-          const parsed = querystring.parse(location.search.split('?')[1]);
-          parsed.isDraft = 'true';
-          const newLocation = cloneDeep(location);
-          newLocation.search = querystring.stringify(parsed);
-          setShouldToastEdits(false);
-          history.push(newLocation);
-        }}
-        closeToast={() => {
-          setShouldToastEdits(true);
-        }}
-      />
-    ), {
-      position: "top-right",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    toast(
+      () => (
+        <ToastMessage
+          switchToDraft={() => {
+            setIsViewingDraft(true);
+            const parsed = querystring.parse(location.search.split('?')[1]);
+            parsed.isDraft = 'true';
+            const newLocation = cloneDeep(location);
+            newLocation.search = querystring.stringify(parsed);
+            setShouldToastEdits(false);
+            history.push(newLocation);
+          }}
+          closeToast={() => {
+            setShouldToastEdits(true);
+          }}
+        />
+      ),
+      {
+        position: 'top-right',
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      },
+    );
 
   useEffect(() => {
     if (!isViewingDraft && shouldToastEdits) {

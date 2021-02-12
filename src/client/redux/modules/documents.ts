@@ -65,7 +65,7 @@ export const reducers = createReducer<DocumentsState, ActionType<typeof actionCr
         },
         {},
       );
-      nextState.data = { ...state.data, ...responseMap };
+      nextState.data = { ...nextState.data, ...responseMap };
     }
     return { ...nextState };
   });

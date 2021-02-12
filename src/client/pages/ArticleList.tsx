@@ -41,9 +41,10 @@ export const ArticleList = ({ location, slug, language }: CategoryListProps) => 
     Object.values(state.documents.data)
       .filter(
         (document) =>
-          document &&
-          document.categories &&
-          document.categories.some((e: SanityDocument) => e._ref === category._id),
+          (document &&
+            document.categories &&
+            document.categories.some((e: SanityDocument) => e._ref === category._id)) ||
+          (!!document.mainCategory && document.mainCategory._ref === category._id),
       )
       .sort((e1, e2) => e1.title.localeCompare(e2.title)),
   );
