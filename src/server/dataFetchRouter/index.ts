@@ -37,11 +37,11 @@ dataFetchRouter.use(async (req, res, next) => {
       {},
     ),
   };
-
+  const featuredArticles = await req.app.services.SanityService.getFeaturedArticles();
   const articles = await req.app.services.SanityService.getNewestArticles();
   req.app.initialArticleData = {
     ...req.app.initialArticleData,
-    ...articles.reduce(
+    ...[...articles, ...featuredArticles].reduce(
       (acc: Record<SanityDocument['slug']['current'], SanityDocument>, cur: SanityDocument) => {
         acc[cur.slug.current] = { ...cur };
         return acc;

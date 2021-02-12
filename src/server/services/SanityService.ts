@@ -50,7 +50,7 @@ class SanityService extends Service {
     throw new Boom.Boom('Client not initialized');
   }
 
-  public async getCategoriesBySlug(): Promise<SanityDocument[]> {
+  public async getCategories(): Promise<SanityDocument[]> {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "category"]{
@@ -106,6 +106,18 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "article"] | order(_createdAt desc) [0..9] {
+          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
+        }
+      `;
+      return this.ServerClient.fetch(query, {});
+    }
+    throw new Boom.Boom('Client not initialized');
+  }
+
+  public async getFeaturedArticles(): Promise<SanityDocument[]> {
+    if (this.ServerClient && this.initialized) {
+      const query = `
+        *[_type == "article" && isFeatured == true] | order(_createdAt desc) [0..1] {
           _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
         }
       `;

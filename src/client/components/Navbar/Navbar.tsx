@@ -19,7 +19,7 @@ export const Navbar = ({ language }: { language: string }) => {
   const pages = useSelector((state) =>
     Object.values(state.documents.data).filter(
       (document: SanityDocument) => document._type === 'page',
-    ),
+    ).sort((e1, e2) => e1.title.localeCompare(e2.title)),
   );
   const categories = useSelector((state) => Object.values(state.categories.data));
   const location = useLocation();
