@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from './ToastMessage.module.scss';
 
 interface MsgProps {
   switchToDraft: () => any;
@@ -9,7 +10,7 @@ const ToastMessage = ({ closeToast, switchToDraft }: MsgProps) => (
   <div>
     🖋 This article is being edited in Varanity Studio
     <button
-      className="toast-message__button"
+      className={classes.gradientBorder}
       type="button"
       onClick={() => {
         switchToDraft();

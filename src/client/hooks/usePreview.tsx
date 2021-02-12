@@ -6,7 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { RouteComponentProps } from 'react-router';
 import { PayloadActionCreator } from 'typesafe-actions';
 import { useSanityPreview } from './useSanityPreview';
-import { ToastMessage } from '../components/ToastMessage';
+import { ToastMessage } from '../components/ToastMessage/ToastMessage';
 
 const usePreview = (
   location: Location,
@@ -47,7 +47,15 @@ const usePreview = (
           setShouldToastEdits(true);
         }}
       />
-    ));
+    ), {
+      position: "top-right",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   useEffect(() => {
     if (!isViewingDraft && shouldToastEdits) {
