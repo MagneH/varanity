@@ -1,14 +1,14 @@
 import React from 'react';
 
 // Styles
-import { SanityDocument } from '@sanity/client';
+import { useQuery } from '@apollo/client';
 import classes from './FeaturedSection.module.scss';
 import { urlFor } from '../../../services/SanityService';
 import { Link } from '../../../components/Link/Link';
-import useSelector from '../../../redux/typedHooks';
 import { useCategoryUrl } from '../../../hooks/useCategoryUrl';
-import { ArticleModel } from '../../Article';
 import { ensure } from '../../../lib/ensure';
+import { Blocks } from '../../../components/Blocks';
+import { FEATURED_ARTICLES } from './FeaturedSection.query';
 
 interface FeaturedSectionProps {
   language: string;
@@ -16,13 +16,10 @@ interface FeaturedSectionProps {
 
 // Exports
 export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
-  const featuredArticle = useSelector((state) =>
-    Object.values(state.documents.data).find(
-      (document: SanityDocument) => document.isFeatured === true,
-    ),
-  ) || { mainImage: undefined, title: '' };
+  const { loading, error, data } = useQuery(FEATURED_ARTICLES);
+  const featuredArticle = (data && data.allArticle[0]) || {};
+  const { mainImage, mainCategory, slug, title, ingress } = featuredArticle;
 
-  const { mainImage } = featuredArticle;
   let srcSet = '';
   let src = '';
   if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
@@ -30,25 +27,23 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
     src = urlFor(mainImage).withOptions({ mainImage }).url() || '';
   }
 
-  const { mainCategory, slug, ingress } = featuredArticle as ArticleModel;
-  const articleUrl =
-    mainCategory && useCategoryUrl(mainCategory && mainCategory._ref, slug.current);
+  const articleUrl = mainCategory && useCategoryUrl(mainCategory && mainCategory._id, slug.current);
 
   return featuredArticle ? (
     <>
-      {featuredArticle.mainImage && src && (
+      {mainImage && src && (
         <Link to={`/${language}/${articleUrl}`}>
           <picture className={classes.articleMainImageContainer}>
             <source type="image/webp" srcSet={srcSet || ''} />
-            <img src={src || ''} alt={featuredArticle.mainImage.alt} />
+            <img src={src || ''} alt={mainImage.alt} />
           </picture>
         </Link>
       )}
       <section className={classes.featuredSection}>
         <Link to={`/${language}/${articleUrl}`} className={classes.link}>
-          <h2 className={classes.featuredSectionTitle}>{featuredArticle.title}</h2>
+          <h2 className={classes.featuredSectionTitle}>{title}</h2>
         </Link>
-        {ingress && <small className={classes.featuredSectionIngress}>{ingress}</small>}
+        {ingress && <Blocks body={ingress.enRaw} />}
       </section>
     </>
   ) : null;

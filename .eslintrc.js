@@ -98,7 +98,10 @@ module.exports = {
       },
     ],
     'no-restricted-syntax': [2, 'LabeledStatement', 'WithStatement'],
-    'no-underscore-dangle': [2, { allow: ['_ref', '_type', '_id', '_createdAt', '_updatedAt'] }],
+    'no-underscore-dangle': [
+      2,
+      { allow: ['_ref', '_type', '_id', '_createdAt', '_updatedAt', '__APOLLO_STATE__'] },
+    ],
     '@typescript-eslint/array-type': 0,
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
