@@ -1,11 +1,14 @@
 import React from 'react';
 import { RequestHandler } from 'express';
-import { renderToStaticMarkup, renderToString } from 'react-dom/server';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { HelmetProvider, FilledContext } from 'react-helmet-async';
 import { StaticRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { createLocation } from 'history';
+import fetch from 'cross-fetch';
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
+import { getDataFromTree } from '@apollo/client/react/ssr';
 import { createStore } from '../../client/redux/createStore';
 import { App } from '../../client/components/App/App';
 import { Html } from '../components/Html';
@@ -111,17 +114,38 @@ export default (
     } = {};
 
     const sheet = new ServerStyleSheet();
-    const body = renderToString(
-      <StyleSheetManager sheet={sheet.instance}>
-        <Provider store={store}>
-          <HelmetProvider context={helmetContext}>
-            <StaticRouter location={req.url} context={routerContext}>
-              <App />
-            </StaticRouter>
-          </HelmetProvider>
-        </Provider>
-      </StyleSheetManager>,
+
+    const client = new ApolloClient({
+      ssrMode: true,
+      link: createHttpLink({
+        uri: 'https://bq0ivwom.api.sanity.io/v1/graphql/production/default',
+        fetch,
+      }),
+      cache: new InMemoryCache(),
+    });
+
+    const AppTree = (
+      <ApolloProvider client={client}>
+        <StyleSheetManager sheet={sheet.instance}>
+          <Provider store={store}>
+            <HelmetProvider context={helmetContext}>
+              <StaticRouter location={req.url} context={routerContext}>
+                <App />
+              </StaticRouter>
+            </HelmetProvider>
+          </Provider>
+        </StyleSheetManager>
+      </ApolloProvider>
     );
+
+    const body = await getDataFromTree(AppTree);
+    // Extract the entirety of the Apollo Client cache's current state
+    const initialApolloState = client.extract();
+
+    // Add both the page content and the cache state to a top-level component
+
+    // Render the component to static markup and return i
+
     const { helmet } = helmetContext as FilledContext;
     const html = `<!DOCTYPE html>${renderToStaticMarkup(
       <Html
@@ -144,6 +168,7 @@ export default (
         bundleCss={bundleCss}
         preload={preloadedAssets}
         initialState={initialState}
+        initialApolloState={initialApolloState}
       />,
     )}`;
 

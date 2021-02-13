@@ -24,6 +24,7 @@ export interface HtmlProps {
   manifest?: string | Asset;
   preload?: (string | Asset)[];
   baseUrl?: string;
+  initialApolloState?: Record<string, unknown>;
 }
 
 // Helpers
@@ -49,6 +50,7 @@ export const Html = ({
   manifest,
   preload = [],
   baseUrl = '/',
+  initialApolloState,
 }: HtmlProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <html lang="en" {...htmlAttributes}>
@@ -151,6 +153,17 @@ export const Html = ({
             __html: `window.__INITIAL_REDUX_STATE__ = ${serialize(initialState, {
               isJSON: true,
             })}`,
+          }}
+        />
+      )}
+      {initialApolloState && (
+        <script
+          /* eslint-disable-next-line react/no-danger */
+          dangerouslySetInnerHTML={{
+            __html: `window.__APOLLO_STATE__=${JSON.stringify(initialApolloState).replace(
+              /</g,
+              '\\u003c',
+            )};`,
           }}
         />
       )}

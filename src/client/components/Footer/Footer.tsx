@@ -12,8 +12,6 @@ export const Footer = () => (
       <Emoji value="❤" label="Heart emoji" />
       by Magne
     </p>
-    <p className={classes.footerCopyright}>
-      Copyright (c) 2018 -{new Date().getFullYear()}, All rights reserved
-    </p>
+    <p className={classes.footerCopyright}>Copyright (c) 2018 - 2021, All rights reserved</p>
   </footer>
 );
