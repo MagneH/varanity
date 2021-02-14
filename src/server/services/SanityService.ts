@@ -66,7 +66,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[slug.current == $slug]{
-          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isOnFrontPage, isFeatured, _updatedAt
+          _type, authors[], slug, title ingress, categories, mainCategory, mainImage, body, isOnFrontPage, isFeatured, _updatedAt
         }
       `;
       const params = {
@@ -81,7 +81,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[references(*[slug.current == $slug]._id)]{
-          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
+          _type, authors[], slug, title, ingress, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
         }
       `;
       const params = {
@@ -106,7 +106,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "article"] | order(_createdAt desc) [0..9] {
-          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
+          _type, authors[], slug, title, ingress, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
         }
       `;
       return this.ServerClient.fetch(query, {});
@@ -118,7 +118,7 @@ class SanityService extends Service {
     if (this.ServerClient && this.initialized) {
       const query = `
         *[_type == "article" && isFeatured == true] | order(_createdAt desc) [0..1] {
-          _type, authors[], slug, title, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
+          _type, authors[], slug, title, ingress, categories, mainCategory, mainImage, body, isFeatured, isOnFrontPage, _updatedAt
         }
       `;
       return this.ServerClient.fetch(query, {});

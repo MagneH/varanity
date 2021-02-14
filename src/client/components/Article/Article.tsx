@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ArticleModel } from '../../pages/Article';
 import { Blocks } from '../Blocks';
 
@@ -8,6 +8,7 @@ import { ensure } from '../../lib/ensure';
 import { AuthorModel } from '../../redux/modules/authors';
 import { AuthorCard } from '../Author/AuthorCard';
 import useSelector from '../../redux/typedHooks';
+import { CategoryModel } from '../../redux/modules/categories';
 
 interface ArticleProps {
   article: ArticleModel;
@@ -26,6 +27,19 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
           .filter((obj: any) => ![null, undefined].includes(obj))
       : [],
   );
+
+  const stateCategories = useSelector((state) => state.categories.data);
+
+  const categoryIdMap = useMemo(
+    () =>
+      Object.values(stateCategories).reduce((acc: Record<CategoryModel['_id'], CategoryModel>, cur) => {
+        acc[cur._id] = cur;
+        return acc;
+      }, {}),
+    [stateCategories],
+  );
+  const categories = [article.mainCategory, ...article.categories].map((e) => categoryIdMap[e._ref]);
+
   const { mainImage } = article;
   let srcSet = '';
   let src = '';
@@ -53,10 +67,23 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
                 </li>
               ))}
           </ul>
+          {article.ingress && (
+            <div className={classes.articleContent}>
+              <Blocks body={article.ingress} />
+            </div>
+          )}
           {article.body && (
             <div className={classes.articleContent}>
               <Blocks body={article.body} />
             </div>
+          )}
+          {categories && (
+            <ul className={classes.tagList}>
+              {categories.map(
+                (category) =>
+                  category && <li key={category._id} className={classes.tag}>{category.title}</li>,
+              )}
+            </ul>
           )}
         </div>
       </div>

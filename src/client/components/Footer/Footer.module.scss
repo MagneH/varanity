@@ -5,6 +5,7 @@
   color: var(--color-text);
   background-color: var(--color-background);
   padding: 1.4em;
+  flex-shrink: 0;
 }
 .footerDescription {
   // Overrides

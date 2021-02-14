@@ -1,5 +1,5 @@
-// import { useMemo } from 'react';
-// import { SanityDocument } from '@sanity/client';
+import { SanityDocument } from '@sanity/client';
+import { useMemo } from 'react';
 
 export const localize = (value: any[] | any, languages: string[]): any => {
   if (Array.isArray(value)) {
@@ -22,4 +22,5 @@ export const localize = (value: any[] | any, languages: string[]): any => {
   return value;
 };
 
-// export const useLocalize = (document: SanityDocument, languages: string[]): SanityDocument => useMemo(() => localize(document, languages), [document, languages]);
+export const useLocalize = (document: SanityDocument, languages: string[]): SanityDocument =>
+  useMemo(() => localize(document, languages), [document, languages]);

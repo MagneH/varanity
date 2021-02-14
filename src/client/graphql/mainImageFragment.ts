@@ -46,5 +46,3 @@ export const mainImageFragment = gql`
     }
   }
 `;
-
-

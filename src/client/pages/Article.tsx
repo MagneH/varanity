@@ -13,6 +13,7 @@ import { actionCreators as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
 import { AuthorModel } from '../redux/modules/authors';
 import useSelector from '../redux/typedHooks';
+import { localize, useLocalize } from '../hooks/useLocalization';
 
 // Types
 export interface ArticleProps {
@@ -27,16 +28,18 @@ export interface ArticleProps {
 
 export interface ArticleModel extends SanityDocument {
   title: string;
-  ingress?: SanityBlock;
+  ingress?: SanityBlock[];
+  body?: SanityBlock[];
   mainCategory: { _ref: string; _type: string };
+  categories: { _ref: string; _type: string }[];
   mainImage?: Partial<ImageUrlBuilderOptionsWithAliases>;
   authors: { author: AuthorModel }[];
   isFeatured: boolean;
   _createdAt: string;
 }
 
-export const Article = ({ isPreview, location, history, match, slug }: ArticleProps) => {
-  const article = useSelector((state) => {
+export const Article = ({ isPreview, location, history, match, slug, language }: ArticleProps) => {
+  const languageArticle = useSelector((state) => {
     if (isPreview) {
       const { query } = url.parse(location.search, true);
       const id = query.isDraft === 'true' ? `drafts.${match.params.id}` : `${match.params.id}`;
@@ -44,6 +47,8 @@ export const Article = ({ isPreview, location, history, match, slug }: ArticlePr
     }
     return state.documents.data[slug];
   });
+
+  const article = useLocalize(languageArticle, [language]);
 
   // eslint-disable-next-line no-underscore-dangle
   if (isPreview) {
@@ -66,7 +71,7 @@ export const Article = ({ isPreview, location, history, match, slug }: ArticlePr
     <>
       <Helmet>
         <title itemProp="name" lang="en">
-          Welcome to Varanity
+          {article.title}
         </title>
       </Helmet>
       <Main>
