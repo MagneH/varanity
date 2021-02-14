@@ -18,6 +18,7 @@
   --color-text: #{$color-black--100};
   --color-background: #{$color-white--100};
   --color-border: #{$color-black--20};
+  --color-tags: #{$color-black--10};
   // ------
   // Style
   // ------
@@ -71,4 +72,18 @@
   padding: 0;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--color-border);
+}
+
+.tagList {
+  margin: 10px 0 0 0;
+  padding: 0;
+  display: flex;
+}
+
+.tag {
+  margin: 5px 10px 5px 0;
+  background: var(--color-tags);
+  color: var(--color-text);
+  padding: 8px 16px;
+  border-radius: 20px;
 }

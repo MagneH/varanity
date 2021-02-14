@@ -49,7 +49,6 @@ export const Article = ({ article, language }: ArticleProps) => {
       >
         <h2 className={classes.postTitle}>{title}</h2>
       </Link>
-      {ingress && <small className={classes.postIngress}>{ingress}</small>}
     </div>
   );
 };
