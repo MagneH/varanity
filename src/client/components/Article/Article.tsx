@@ -38,7 +38,12 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
       }, {}),
     [stateCategories],
   );
-  const categories = [article.mainCategory, ...article.categories].map((e) => categoryIdMap[e._ref]);
+  let categoryIds = [article.mainCategory];
+
+  if(article && article.categories) {
+    categoryIds = categoryIds.concat(article.categories);
+  }
+  const categories = categoryIds.map((e) => categoryIdMap[e._ref]);
 
   const { mainImage } = article;
   let srcSet = '';
@@ -67,11 +72,6 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
                 </li>
               ))}
           </ul>
-          {article.ingress && (
-            <div className={classes.articleContent}>
-              <Blocks body={article.ingress} />
-            </div>
-          )}
           {article.body && (
             <div className={classes.articleContent}>
               <Blocks body={article.body} />

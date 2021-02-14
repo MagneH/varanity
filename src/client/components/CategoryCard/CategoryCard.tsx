@@ -56,10 +56,12 @@ export const Category = ({ category, language }: CategoryProps) => {
     <div className={classes.post}>
       {category && mainImage && mainImage.asset && mainImage.asset._ref && (
         <Link to={`/${language}/${currentUrl}`}>
-          <picture className={classes.postImage}>
-            <source type="image/webp" srcSet={srcSet} />
-            <img src={src} alt="" />
-          </picture>
+          <div className={classes.postImage}>
+            <picture>
+              <source type="image/webp" srcSet={srcSet} />
+              <img src={src} alt="" />
+            </picture>
+          </div>
         </Link>
       )}
       <Link
