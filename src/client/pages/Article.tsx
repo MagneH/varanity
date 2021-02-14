@@ -31,7 +31,7 @@ export interface ArticleModel extends SanityDocument {
   ingress?: SanityBlock[];
   body?: SanityBlock[];
   mainCategory: { _ref: string; _type: string };
-  categories: { _ref: string; _type: string }[];
+  categories?: { _ref: string; _type: string }[];
   mainImage?: Partial<ImageUrlBuilderOptionsWithAliases>;
   authors: { author: AuthorModel }[];
   isFeatured: boolean;
