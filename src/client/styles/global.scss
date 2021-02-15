@@ -17,6 +17,9 @@
   --color-text: #{$color-black--80};
   --color-link: #{$color-black--80};
   --color-background: #{$color-white--100};
+  --color-background--dark: #{$color-dark-blue};
+  --color-border: #{$color-black--20};
+  --color-tags: #{$color-black--10};
 }
 
 html {
