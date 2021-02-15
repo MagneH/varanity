@@ -10,7 +10,7 @@ export const Footer = () => (
     <p className={classes.footerDescription}>
       Made with
       <Emoji value="❤" label="Heart emoji" />
-      by Magne
+      by <a href="https://github.com/MagneH">Magne</a>
     </p>
     <p className={classes.footerCopyright}>Copyright (c) 2018 - 2021, All rights reserved</p>
   </footer>

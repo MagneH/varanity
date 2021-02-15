@@ -10,6 +10,8 @@ import { AuthorCard } from '../Author/AuthorCard';
 import useSelector from '../../redux/typedHooks';
 import { CategoryModel } from '../../redux/modules/categories';
 
+import { uniqBy } from 'lodash'
+
 interface ArticleProps {
   article: ArticleModel;
 }
@@ -43,7 +45,7 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
   if(article && article.categories) {
     categoryIds = categoryIds.concat(article.categories);
   }
-  const categories = categoryIds.map((e) => categoryIdMap[e._ref]);
+  const categories = uniqBy(categoryIds.map((e) => categoryIdMap[e._ref]), '_id') ;
 
   const { mainImage } = article;
   let srcSet = '';
