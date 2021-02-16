@@ -45,7 +45,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.9",
+    "@apollo/client": "^3.3.11",
     "@babel/runtime": "^7.12.13",
     "@hapi/boom": "^9.1.1",
     "@sanity/block-content-to-react": "^2.0.7",
