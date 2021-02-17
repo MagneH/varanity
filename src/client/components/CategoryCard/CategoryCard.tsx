@@ -33,7 +33,7 @@ export const Category = ({ category, language }: CategoryProps) => {
     }
     return `${urlCreator(
       `${currentCategory.slug.current}/${currentUrl}`,
-      categoryIdMap[currentCategory.parent._ref],
+      categoryIdMap[currentCategory.parent._ref] || '',
     )}`;
   };
 

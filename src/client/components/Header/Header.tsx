@@ -14,10 +14,10 @@ export interface HeaderProps {
 }
 
 // Exports
-export const Header = ({ subtitle, description, className, children }: HeaderProps) => (
+export const Header = ({ title, subtitle, description, className, children }: HeaderProps) => (
   <header className={classNames(classes.header)}>
     <div className={classNames(classes.headerHero, className)}>
-      <h1 className={classes.headerTitle}>Varanity</h1>
+      <h1 className={classes.headerTitle}>{title}</h1>
       {subtitle && <small className={classes.headerSubtitle}>{subtitle}</small>}
       {description && <p className={classes.description}>{description}</p>}
       {children}

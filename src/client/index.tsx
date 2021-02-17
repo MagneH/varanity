@@ -24,7 +24,7 @@ const client = new ApolloClient({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   cache: new InMemoryCache().restore(
-    window && '__APOLLO_STATE__' in window ? window.__APOLLO_STATE__ : {},
+    window && '__APOLLO_STATE__' in window ? (window as any).__APOLLO_STATE__ : {},
   ),
 });
 

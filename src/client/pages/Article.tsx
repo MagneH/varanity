@@ -13,7 +13,7 @@ import { actionCreators as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
 import { AuthorModel } from '../redux/modules/authors';
 import useSelector from '../redux/typedHooks';
-import { localize, useLocalize } from '../hooks/useLocalization';
+import { useLocalize } from '../hooks/useLocalization';
 
 // Types
 export interface ArticleProps {

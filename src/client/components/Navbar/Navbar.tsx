@@ -52,8 +52,8 @@ export const Navbar = ({ language }: { language: string }) => {
         })}
         role="navigation"
       >
-        <Link className={classes.navbarLogo} to="/" aria-label="Home">
-          <h1 className={classes.navbarLogoText}>Varan</h1>
+        <Link className={classes.navbarLogo} to="/" aria-label="Varanity">
+          <h1 className={classes.navbarLogoText}>Varanity</h1>
         </Link>
         <NavHamburger
           isOpen={isOpen}

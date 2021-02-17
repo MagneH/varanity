@@ -1,18 +1,18 @@
 import React from 'react';
-import { render, wait } from '@testing-library/react';
-import { HelmetProvider } from 'react-helmet-async';
+import { render, waitFor } from '@testing-library/react';
 import { Home } from './Home';
+import { MockProviderWrapper } from '../../../../test/__mocks__/Wrappers';
 
 // Tests
 it('should have correct page title', async (done) => {
   render(
-    <HelmetProvider>
+    <MockProviderWrapper>
       <Home language="en" />
-    </HelmetProvider>,
+    </MockProviderWrapper>,
   );
 
   // Assertions
-  await wait(() => expect(document.title).toEqual('Home'));
+  await waitFor(() => expect(document.title).toEqual('Home'));
 
   // Done
   done();
