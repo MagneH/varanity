@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import useSelector from '../redux/typedHooks';
 import { CategoryModel } from '../redux/modules/categories';
 
-export const useCategoryUrl = (categoryId: CategoryModel['_id'], slug?: string): string => {
+export const useCategoryUrl = (categoryId?: CategoryModel['_id'], slug?: string): string => {
   const [url, setUrl] = useState('');
   const categories = useSelector((state) => state.categories.data);
   const categoryIdMap = useMemo(
@@ -31,7 +31,7 @@ export const useCategoryUrl = (categoryId: CategoryModel['_id'], slug?: string):
   };
 
   useEffect(() => {
-    const calculatedUrl = urlCreator(slug || '', categoryId);
+    const calculatedUrl = urlCreator(slug || '', categoryId || '');
     setUrl(calculatedUrl);
   }, [categoryId, slug, categoryIdMap]);
   return url;

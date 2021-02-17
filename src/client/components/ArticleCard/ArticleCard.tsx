@@ -1,6 +1,8 @@
 import React from 'react';
 
 // Styles
+import styled from 'styled-components';
+import { CameraAltOutlined } from '@material-ui/icons';
 import classes from './ArticleCard.module.scss';
 import { urlFor } from '../../services/SanityService';
 import { ArticleModel } from '../../pages/Article';
@@ -34,12 +36,20 @@ export const Article = ({ article, language }: ArticleProps) => {
 
   return (
     <div className={classes.post}>
-      {article && mainImage && (
+      {article && mainImage ? (
         <Link to={`/${language}/${articleUrl}`}>
-          <picture className={classes.postImage}>
-            <source type="image/webp" srcSet={srcSet} />
-            <img src={src} alt="" />
-          </picture>
+          <PictureWrapper>
+            <Picture>
+              <source type="image/webp" srcSet={srcSet} />
+              <img src={src} alt="" />
+            </Picture>
+          </PictureWrapper>
+        </Link>
+      ) : (
+        <Link to={`/${language}/${articleUrl}`}>
+          <PicturePlaceholder>
+            <CameraAltOutlined />
+          </PicturePlaceholder>
         </Link>
       )}
       <Link
@@ -52,3 +62,37 @@ export const Article = ({ article, language }: ArticleProps) => {
     </div>
   );
 };
+
+const Picture = styled.picture`
+  display: flex;
+  flex: 1;
+  flex-basis: 5em;
+`;
+
+const PictureWrapper = styled.div`
+  border: 1px solid
+    ${({ theme }) =>
+      theme && theme.globals && theme.globals.placeholderBackground
+        ? theme.globals.placeholderBackground
+        : 'red'};
+`;
+
+const PicturePlaceholder = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  width: 300px;
+  background-color: ${({ theme }) =>
+    theme && theme.globals && theme.globals.placeholderBackground
+      ? theme.globals.placeholderBackground
+      : 'red'};
+  svg {
+    height: 60px;
+    width: 60px;
+    fill: ${({ theme }) =>
+      theme && theme.globals && theme.globals.placeholderIcons
+        ? theme.globals.placeholderIcons
+        : 'red'};
+  }
+`;

@@ -2,13 +2,12 @@ import React from 'react';
 
 // Styles
 import { useQuery } from '@apollo/client';
-import classes from './FeaturedSection.module.scss';
-import { urlFor } from '../../../services/SanityService';
+import styled from 'styled-components';
 import { Link } from '../../../components/Link/Link';
 import { useCategoryUrl } from '../../../hooks/useCategoryUrl';
-import { ensure } from '../../../lib/ensure';
 import { Blocks } from '../../../components/Blocks';
 import { FEATURED_ARTICLES } from './FeaturedSection.query';
+import { useMainImage } from '../../../hooks/useMainImage';
 
 interface FeaturedSectionProps {
   language: string;
@@ -18,33 +17,71 @@ interface FeaturedSectionProps {
 export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
   const { loading, error, data } = useQuery(FEATURED_ARTICLES);
   const featuredArticle = (data && data.allArticle[0]) || {};
-  const { mainImage, mainCategory, slug, title, ingress } = featuredArticle;
+  const { mainImage, mainCategory = {}, slug = {}, title, ingress } = featuredArticle;
 
-  let srcSet = '';
-  let src = '';
-  if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
-    srcSet = urlFor(ensure(mainImage)).withOptions({ mainImage }).format('webp').url() || '';
-    src = urlFor(mainImage).withOptions({ mainImage }).url() || '';
-  }
-
-  const articleUrl = mainCategory && useCategoryUrl(mainCategory && mainCategory._id, slug.current);
+  const [src, srcSet] = useMainImage(mainImage);
+  const articleUrl = useCategoryUrl(mainCategory._id, slug.current);
 
   return featuredArticle ? (
     <>
       {mainImage && src && (
         <Link to={`/${language}/${articleUrl}`}>
-          <picture className={classes.articleMainImageContainer}>
+          <Picture>
             <source type="image/webp" srcSet={srcSet || ''} />
             <img src={src || ''} alt={mainImage.alt} />
-          </picture>
+          </Picture>
         </Link>
       )}
-      <section className={classes.featuredSection}>
-        <Link to={`/${language}/${articleUrl}`} className={classes.link}>
-          <h2 className={classes.featuredSectionTitle}>{title}</h2>
-        </Link>
+      <Section>
+        <StyledTextLink to={`/${language}/${articleUrl}`}>
+          <Title>{title}</Title>
+        </StyledTextLink>
         {ingress && <Blocks body={ingress.enRaw} />}
-      </section>
+      </Section>
     </>
   ) : null;
 };
+
+const Picture = styled.picture`
+  flex: 1;
+  flex-basis: 5em;
+  min-width: 100%;
+  width: 100%;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+  source {
+    height: 0;
+  }
+`;
+
+const Section = styled.section`
+  display: flex;
+  flex: 1;
+  justify-self: center;
+  align-self: flex-start;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 0.9em;
+  width: 100%;
+  a {
+    width: 100%;
+  }
+`;
+
+const StyledTextLink = styled(Link)`
+  text-decoration: none;
+  color: var(--color-text);
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const Title = styled.h2`
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+  font-size: 3.2em;
+`;

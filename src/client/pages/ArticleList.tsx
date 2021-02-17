@@ -90,7 +90,7 @@ export const ArticleList = ({ location, slug, language }: CategoryListProps) => 
         )}
         {childCategories.length > 0 && (
           <Section className={classes.lastPostsSection}>
-            <h1>{category.title}</h1>
+            {category.title !== 'Categories' && <h1>{category.title}</h1>}
             <h2>Categories</h2>
             <div className={classes.lastPostsSectionGrid}>
               {childCategories.map((childCategory) => (

@@ -5,7 +5,7 @@ import { Route, Switch, useLocation, Redirect, RouteComponentProps } from 'react
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import ReactGA from 'react-ga';
 import ttiPolyfill from 'tti-polyfill';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import favicon from '../../../assets/favicon.ico';
 import { Navbar } from '../Navbar/Navbar';
 import { Footer } from '../Footer/Footer';
@@ -25,6 +25,8 @@ import { Article, ArticleProps } from '../../pages/Article';
 
 import useSelector from '../../redux/typedHooks';
 import { ArticleList } from '../../pages/ArticleList';
+import ThemeProvider from '../ThemeProvider';
+import { themeDefault } from '../Theme/themeDefault';
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('asd-123', { testMode: process.env.NODE_ENV !== 'production' });
@@ -214,85 +216,98 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
     });
   });
 
+  const newTheme = { ...themeDefault };
+
   return (
-    <TrackerContext.Provider
-      value={{
-        initialLoadedProp: initialLoaded,
-        setInitialLoadedProp: () => setInitialLoaded(true),
-      }}
-    >
-      <Navbar language={language} />
-      <Switch>
-        <Route
-          exact
-          path={`${languageMatch.path}/`}
-          component={() => <Home language={language} />}
-        />
-        <Route
-          path={`${languageMatch.path}/pages/:pageSlug`}
-          component={({
-            match: pageMatch,
-            location: routeLocation,
-          }: {
-            match: { params: any };
-            location: Location;
-          }) => (
-            <Page
-              language={language}
-              match={pageMatch}
-              location={routeLocation}
-              history={history}
-              slug={pageMatch.params.pageSlug}
-            />
-          )}
-        />
-        <Route
-          path={`${languageMatch.path}/articles/:articleSlug`}
-          component={({
-            match: articleMatch,
-            location: routeLocation,
-          }: {
-            match: { params: any };
-            location: Location;
-          }) => (
-            <Article
-              language={language}
-              match={articleMatch}
-              location={routeLocation}
-              history={history}
-              slug={articleMatch.params.articleSlug}
-            />
-          )}
-        />
-        <Route
-          path={`${languageMatch.path}/preview`}
-          component={({ match: previewMatch }: { match: { path: any }; location: Location }) => (
-            <PreviewRouter match={previewMatch} />
-          )}
-        />
-        <Route
-          path="/*/:slug"
-          component={({
-            location: routeLocation,
-            match: slugMatch,
-            match: {
-              params: { slug },
-            },
-          }: {
-            // eslint-disable-next-line react/no-unused-prop-types
-            match: { params: { slug: string } };
-            // eslint-disable-next-line react/no-unused-prop-types
-            location: Location;
-          }): ReactElement => {
-            // Check if this route is a subcategory, if not, forward to article
-            const categoryTree = useSelector((state) => state.categories);
-            if (
-              categoryTree &&
-              categoryTree.data &&
-              Object.keys(categoryTree.data).includes(slug)
-            ) {
+    <ThemeProvider theme={newTheme}>
+      <TrackerContext.Provider
+        value={{
+          initialLoadedProp: initialLoaded,
+          setInitialLoadedProp: () => setInitialLoaded(true),
+        }}
+      >
+        <Navbar language={language} />
+        <Switch>
+          <Route
+            exact
+            path={`${languageMatch.path}/`}
+            component={() => <Home language={language} />}
+          />
+          <Route
+            path={`${languageMatch.path}/pages/:pageSlug`}
+            component={({
+              match: pageMatch,
+              location: routeLocation,
+            }: {
+              match: { params: any };
+              location: Location;
+            }) => (
+              <Page
+                language={language}
+                match={pageMatch}
+                location={routeLocation}
+                history={history}
+                slug={pageMatch.params.pageSlug}
+              />
+            )}
+          />
+          <Route
+            path={`${languageMatch.path}/articles/:articleSlug`}
+            component={({
+              match: articleMatch,
+              location: routeLocation,
+            }: {
+              match: { params: any };
+              location: Location;
+            }) => (
+              <Article
+                language={language}
+                match={articleMatch}
+                location={routeLocation}
+                history={history}
+                slug={articleMatch.params.articleSlug}
+              />
+            )}
+          />
+          <Route
+            path={`${languageMatch.path}/preview`}
+            component={({ match: previewMatch }: { match: { path: any }; location: Location }) => (
+              <PreviewRouter match={previewMatch} />
+            )}
+          />
+          <Route
+            path="/*/:slug"
+            component={({
+              location: routeLocation,
+              match: slugMatch,
+              match: {
+                params: { slug },
+              },
+            }: {
+              // eslint-disable-next-line react/no-unused-prop-types
+              match: { params: { slug: string } };
+              // eslint-disable-next-line react/no-unused-prop-types
+              location: Location;
+            }): ReactElement => {
+              // Check if this route is a subcategory, if not, forward to article
+              const categoryTree = useSelector((state) => state.categories);
+              if (
+                categoryTree &&
+                categoryTree.data &&
+                Object.keys(categoryTree.data).includes(slug)
+              ) {
+                return (
+                  <ArticleList
+                    language={language}
+                    match={slugMatch}
+                    location={routeLocation}
+                    history={history}
+                    slug={slug}
+                  />
+                );
+              }
               return (
-                <ArticleList
+                <Article
                   language={language}
                   match={slugMatch}
                   location={routeLocation}
@@ -300,20 +315,11 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
                   slug={slug}
                 />
               );
-            }
-            return (
-              <Article
-                language={language}
-                match={slugMatch}
-                location={routeLocation}
-                history={history}
-                slug={slug}
-              />
-            );
-          }}
-        />
-      </Switch>
-      <Footer />
-    </TrackerContext.Provider>
+            }}
+          />
+        </Switch>
+        <Footer />
+      </TrackerContext.Provider>
+    </ThemeProvider>
   );
 };

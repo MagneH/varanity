@@ -5,6 +5,11 @@ import { createStore } from './createStore';
 import { routerHistory } from '../lib/routerHistory';
 import { initialState as initialApplicationState } from './modules/application';
 import { initialState as initialRouterState } from './modules/router';
+import { initialState as initialDocumentsState } from './modules/documents';
+import { initialState as initialAuthorState } from './modules/authors';
+import { initialState as initialCategoryState } from './modules/categories';
+import { initialState as initialPreviewState } from './modules/previews';
+import { initialState as initialTemplateState } from './modules/templates';
 
 // Mocks
 jest.mock('../lib/routerHistory', () => ({
@@ -26,6 +31,11 @@ it('should create a store with correct initial state', () => {
   expect(store.getState()).toEqual({
     application: initialApplicationState,
     router: initialRouterState,
+    documents: initialDocumentsState,
+    authors: initialAuthorState,
+    categories: initialCategoryState,
+    previews: initialPreviewState,
+    templates: initialTemplateState,
   });
 });
 it('should accept initial state as argument', () => {
@@ -35,6 +45,11 @@ it('should accept initial state as argument', () => {
   expect(store.getState()).toEqual({
     application: { dummyProp: true },
     router: initialRouterState,
+    documents: initialDocumentsState,
+    authors: initialAuthorState,
+    categories: initialCategoryState,
+    previews: initialPreviewState,
+    templates: initialTemplateState,
   });
 });
 it('should use routerHistory and return it', () => {

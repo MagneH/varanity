@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react';
+import { uniqBy } from 'lodash';
+import styled from 'styled-components';
 import { ArticleModel } from '../../pages/Article';
 import { Blocks } from '../Blocks';
 
@@ -9,8 +11,6 @@ import { AuthorModel } from '../../redux/modules/authors';
 import { AuthorCard } from '../Author/AuthorCard';
 import useSelector from '../../redux/typedHooks';
 import { CategoryModel } from '../../redux/modules/categories';
-
-import { uniqBy } from 'lodash'
 
 interface ArticleProps {
   article: ArticleModel;
@@ -34,18 +34,24 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
 
   const categoryIdMap = useMemo(
     () =>
-      Object.values(stateCategories).reduce((acc: Record<CategoryModel['_id'], CategoryModel>, cur) => {
-        acc[cur._id] = cur;
-        return acc;
-      }, {}),
+      Object.values(stateCategories).reduce(
+        (acc: Record<CategoryModel['_id'], CategoryModel>, cur) => {
+          acc[cur._id] = cur;
+          return acc;
+        },
+        {},
+      ),
     [stateCategories],
   );
   let categoryIds = [article.mainCategory];
 
-  if(article && article.categories) {
+  if (article && article.categories) {
     categoryIds = categoryIds.concat(article.categories);
   }
-  const categories = uniqBy(categoryIds.map((e) => categoryIdMap[e._ref]), '_id') ;
+  const categories = uniqBy(
+    categoryIds.map((e) => categoryIdMap[e._ref]),
+    '_id',
+  );
 
   const { mainImage } = article;
   let srcSet = '';
@@ -57,11 +63,13 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
 
   return article ? (
     <section className={classes.article}>
-      {mainImage && mainImage.asset && mainImage.asset._ref && (
-        <picture className={classes.articleMainImageContainer}>
+      {mainImage && mainImage.asset && mainImage.asset._ref ? (
+        <Picture>
           <source type="image/webp" srcSet={srcSet || ''} />
           <img src={src || ''} alt={mainImage.alt} />
-        </picture>
+        </Picture>
+      ) : (
+        <PicturePlaceholder />
       )}
       <div className={classes.articleContentWrapper}>
         <div className={classes.articleContent}>
@@ -83,7 +91,11 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
             <ul className={classes.tagList}>
               {categories.map(
                 (category) =>
-                  category && <li key={category._id} className={classes.tag}>{category.title}</li>,
+                  category && (
+                    <li key={category._id} className={classes.tag}>
+                      {category.title}
+                    </li>
+                  ),
               )}
             </ul>
           )}
@@ -92,3 +104,25 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
     </section>
   ) : null;
 };
+
+const Picture = styled.picture`
+  flex: 1;
+  flex-basis: 5em;
+  min-width: 100%;
+  width: 100%;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+  source {
+    height: 0;
+  }
+`;
+
+const PicturePlaceholder = styled.div`
+  flex: 1;
+  flex-basis: 5em;
+  min-width: 100%;
+  width: 100%;
+  height: 100px;
+`;
