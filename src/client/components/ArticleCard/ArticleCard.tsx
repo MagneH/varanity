@@ -2,7 +2,7 @@ import React from 'react';
 
 // Styles
 import styled from 'styled-components';
-import { CameraAltOutlined } from '@material-ui/icons';
+// import { FiCamera } from 'react-icons/fi';
 import classes from './ArticleCard.module.scss';
 import { urlFor } from '../../services/SanityService';
 import { ArticleModel } from '../../pages/Article';
@@ -47,9 +47,7 @@ export const Article = ({ article, language }: ArticleProps) => {
         </Link>
       ) : (
         <Link to={`/${language}/${articleUrl}`}>
-          <PicturePlaceholder>
-            <CameraAltOutlined />
-          </PicturePlaceholder>
+          <PicturePlaceholder>{/* <FiCamera /> */}</PicturePlaceholder>
         </Link>
       )}
       <Link
