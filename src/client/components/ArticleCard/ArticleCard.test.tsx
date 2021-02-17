@@ -5,6 +5,12 @@ import { MockProviderWrapper } from '../../../../test/__mocks__/Wrappers';
 
 // Tests
 it('should render title', () => {
+  const mockObserveFn = () => ({
+    observe: jest.fn(),
+    disconnect: jest.fn(),
+  });
+
+  window.IntersectionObserver = jest.fn().mockImplementation(mockObserveFn);
   const { getByText } = render(
     <MockProviderWrapper>
       <Article

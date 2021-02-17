@@ -25,7 +25,7 @@
     "pretty": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "resolveJsonModule": true,
     "outDir": "dist"
   },
