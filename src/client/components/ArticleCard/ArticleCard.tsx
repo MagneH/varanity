@@ -17,7 +17,7 @@ interface ArticleProps {
 }
 
 export const Article = ({ article, language }: ArticleProps) => {
-  const { ingress, title, mainImage, slug, mainCategory } = article;
+  const { title, mainImage, slug, mainCategory } = article;
 
   const articleUrl = useCategoryUrl(mainCategory && mainCategory._ref, slug.current);
 

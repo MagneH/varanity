@@ -15,7 +15,7 @@ interface FeaturedSectionProps {
 
 // Exports
 export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
-  const { loading, error, data } = useQuery(FEATURED_ARTICLES);
+  const { data } = useQuery(FEATURED_ARTICLES);
   const featuredArticle = (data && data.allArticle[0]) || {};
   const { mainImage, mainCategory = {}, slug = {}, title, ingress } = featuredArticle;
 

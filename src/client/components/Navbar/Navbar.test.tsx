@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
 import { Waypoint } from 'react-waypoint';
 import * as redux from 'react-redux';
 import { Navbar } from './Navbar';
