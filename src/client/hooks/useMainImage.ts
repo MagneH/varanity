@@ -4,7 +4,7 @@ import { urlFor } from '../services/SanityService';
 import { ensure } from '../lib/ensure';
 
 export const useMainImage = (
-  mainImage: SanityImageObject,
+  mainImage: SanityImageObject | undefined,
 ): [string | undefined, string | undefined] => {
   const [src, setSrc] = useState('');
   const [srcSet, setSrcSet] = useState('');

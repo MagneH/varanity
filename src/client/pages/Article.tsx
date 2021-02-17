@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import { SanityBlock, SanityDocument } from '@sanity/client';
 import { useDispatch } from 'react-redux';
 import url from 'url';
-import { ImageUrlBuilderOptionsWithAliases } from '@sanity/image-url/lib/types/types';
+import { SanityImageObject } from '@sanity/image-url/lib/types/types';
 import { RouteComponentProps } from 'react-router';
 import { usePreview } from '../hooks/usePreview';
 import { ArticleComponent } from '../components/Article/Article';
@@ -33,7 +33,7 @@ export interface ArticleModel extends SanityDocument {
   body?: SanityBlock[];
   mainCategory: { _ref: string; _type: string };
   categories?: { _ref: string; _type: string }[];
-  mainImage?: Partial<ImageUrlBuilderOptionsWithAliases>;
+  mainImage?: SanityImageObject & { alt: string };
   authors: { author: AuthorModel }[];
   isFeatured: boolean;
   _createdAt: string;
