@@ -27,6 +27,7 @@ import useSelector from '../../redux/typedHooks';
 import { ArticleList } from '../../pages/ArticleList';
 import ThemeProvider from '../ThemeProvider';
 import { themeDefault } from '../Theme/themeDefault';
+import { NotFound } from '../../pages/errors/NotFound/NotFound';
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('asd-123', { testMode: process.env.NODE_ENV !== 'production' });
@@ -74,6 +75,9 @@ export const App = hot(() => {
                   const {
                     params: { language },
                   } = languageMatch;
+                  if (!['en', 'no'].includes(languageMatch.params.language)) {
+                    return <Redirect to="/en/not-found" />;
+                  }
                   return (
                     <LanguageRouter
                       language={language}
@@ -160,7 +164,7 @@ const PreviewRouter = ({ match }: PreviewProps) => (
   </>
 );
 
-const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProps) => {
+export const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProps) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
 
   useEffect(() => {
@@ -233,6 +237,7 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
             path={`${languageMatch.path}/`}
             component={() => <Home language={language} />}
           />
+          <Route exact path={`${languageMatch.path}/not-found`} component={() => <NotFound />} />
           <Route
             path={`${languageMatch.path}/pages/:pageSlug`}
             component={({
@@ -305,6 +310,9 @@ const LanguageRouter = ({ language, languageMatch, history }: LanguageRouterProp
                     slug={slug}
                   />
                 );
+              }
+              if (!slug || !slugMatch || !language || !routeLocation || !history) {
+                return <NotFound />;
               }
               return (
                 <Article

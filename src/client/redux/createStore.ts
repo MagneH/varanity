@@ -1,7 +1,7 @@
 import { routerMiddleware } from 'connected-react-router';
 import { createEpicMiddleware } from 'redux-observable';
 import { Action, applyMiddleware, createStore as reduxCreateStore, Middleware, Store } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { createLogger } from 'redux-logger';
 import immutableStateInvariantMiddleware from 'redux-immutable-state-invariant';
 import { History } from 'history';
@@ -60,6 +60,7 @@ export const createStore = (preloadedState = {}): { store: Store; history: Histo
   // Enable hot reloading
   if (process.env.NODE_ENV === 'development' && module.hot) {
     module.hot.accept('./index', () => {
+      // eslint-disable-next-line global-require
       store.replaceReducer(rootReducer);
     });
   }

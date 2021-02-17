@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { SanityDocument } from '@sanity/client';
 import { RouteComponentProps } from 'react-router';
 import qs from 'qs';
 import { PageComponent } from '../components/Page/Page';
 import { usePreview } from '../hooks/usePreview';
-import { RootState } from '../redux';
 
 import { actionCreators as previewActions } from '../redux/modules/previews';
-import { actionCreators as documentActions } from '../redux/modules/documents';
+import { actions as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
+import useSelector from '../redux/typedHooks';
+import { NotFound } from './errors/NotFound/NotFound';
 
 // Types
 export interface PageProps {
@@ -29,9 +30,12 @@ export interface PageModel extends SanityDocument {
 }
 
 export const Page = ({ isPreview, location, history, match, slug }: PageProps) => {
+  const [didFetch, setDidFetch] = useState(false);
+  const isLoading = useSelector((state) => state.documents.isLoading);
+
   const query = qs.parse(location.search, { ignoreQueryPrefix: true });
 
-  const page = useSelector<RootState, PageModel>((state) => {
+  const page = useSelector((state) => {
     if (isPreview) {
       const id = query.isDraft === 'true' ? `drafts.${match.params.id}` : `${match.params.id}`;
       return state.previews.data[id];
@@ -49,10 +53,15 @@ export const Page = ({ isPreview, location, history, match, slug }: PageProps) =
   useEffect(() => {
     if (!isPreview) {
       if (!page) {
-        dispatch(documentActions.getOne(slug));
+        setDidFetch(true);
+        dispatch(documentActions.getOne.request(slug));
       }
     }
   }, [location]);
+
+  if (didFetch && !isLoading && !page) {
+    return <NotFound />;
+  }
 
   return page ? (
     <>
@@ -66,6 +75,6 @@ export const Page = ({ isPreview, location, history, match, slug }: PageProps) =
       </Main>
     </>
   ) : (
-    <div>Loading</div>
+    <div>Loading Page</div>
   );
 };

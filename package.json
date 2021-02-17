@@ -77,6 +77,7 @@
     "react-helmet": "^6.1.0",
     "react-helmet-async": "^1.0.7",
     "react-hot-loader": "^4.13.0",
+    "react-icons": "^4.2.0",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -187,6 +188,7 @@
       {
         "displayName": "server",
         "moduleNameMapper": {
+          "^.+\\.css?$": "<rootDir>/test/__mocks__/styleMock.ts",
           "^.+\\.svg?$": "<rootDir>/test/__mocks__/svgMock.ts"
         },
         "testEnvironment": "node",

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { SanityBlock, SanityDocument } from '@sanity/client';
 import { useDispatch } from 'react-redux';
@@ -9,11 +9,12 @@ import { usePreview } from '../hooks/usePreview';
 import { ArticleComponent } from '../components/Article/Article';
 
 import { actionCreators as previewActions } from '../redux/modules/previews';
-import { actionCreators as documentActions } from '../redux/modules/documents';
+import { actions as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
 import { AuthorModel } from '../redux/modules/authors';
 import useSelector from '../redux/typedHooks';
 import { useLocalize } from '../hooks/useLocalization';
+import { NotFound } from './errors/NotFound/NotFound';
 
 // Types
 export interface ArticleProps {
@@ -39,6 +40,8 @@ export interface ArticleModel extends SanityDocument {
 }
 
 export const Article = ({ isPreview, location, history, match, slug, language }: ArticleProps) => {
+  const [didFetch, setDidFetch] = useState(false);
+  const isLoading = useSelector((state) => state.documents.isLoading);
   const languageArticle = useSelector((state) => {
     if (isPreview) {
       const { query } = url.parse(location.search, true);
@@ -62,10 +65,15 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
   useEffect(() => {
     if (!isPreview) {
       if (!article) {
-        dispatch(documentActions.getOne(slug));
+        setDidFetch(true);
+        dispatch(documentActions.getOne.request(slug));
       }
     }
   }, [location]);
+
+  if (didFetch && !isLoading && !article) {
+    return <NotFound />;
+  }
 
   return article ? (
     <>
@@ -79,6 +87,6 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
       </Main>
     </>
   ) : (
-    <div>Loading</div>
+    <div>Loading Article</div>
   );
 };

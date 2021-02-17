@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { SanityDocument } from '@sanity/client';
 
 import { RouteComponentProps } from 'react-router';
-import { actionCreators as documentActions } from '../redux/modules/documents';
+import { actions as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
 import useSelector from '../redux/typedHooks';
 import { Section } from '../components/Section/Section';
@@ -53,7 +53,7 @@ export const ArticleList = ({ location, slug, language }: CategoryListProps) => 
 
   useEffect(() => {
     if (!isFetched) {
-      dispatch(documentActions.getByCategory(slug));
+      dispatch(documentActions.getByCategory.request(slug));
       setIsFetched(true);
     }
   }, [location]);
