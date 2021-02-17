@@ -186,4 +186,3 @@ describe('hamburger', () => {
     expect(container.querySelector('.mocked-expanded-hamburger-menu')).not.toBeInTheDocument();
   });
 });
-
