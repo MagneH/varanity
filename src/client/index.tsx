@@ -14,6 +14,7 @@ import { App } from './components/App/App';
 // Global Styles
 import 'normalize.css';
 import './styles/global.scss';
+import { ScrollToTop } from './components/ScrollToTop';
 
 const client = new ApolloClient({
   uri: 'https://bq0ivwom.api.sanity.io/v1/graphql/production/default',
@@ -35,6 +36,7 @@ const render = () =>
       <Provider store={store}>
         <HelmetProvider>
           <ConnectedRouter history={history}>
+            <ScrollToTop />
             <App />
           </ConnectedRouter>
         </HelmetProvider>
