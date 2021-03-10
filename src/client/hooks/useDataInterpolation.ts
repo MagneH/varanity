@@ -5,7 +5,9 @@ const replacerCurry = (data: Record<string, string>) => (intpl = '') => {
   const search = intpl.match(/[A-z]+/gm);
   if (Array.isArray(search)) {
     const key = search[0];
+    // eslint-disable-next-line no-console
     if (!(key in data)) console.warn(`Key ${key} from ${intpl} not found in details Object`);
+    // eslint-disable-next-line no-console
     if (key === '') console.warn(`Key is empty`);
     return data[key] || intpl;
   }

@@ -7,7 +7,6 @@ import { Link } from '../Link/Link';
 import { CategoryModel, LocalizedCategoryModel } from '../../redux/modules/categories';
 import useSelector from '../../redux/typedHooks';
 import { ensure } from '../../lib/ensure';
-import { useLocalize } from '../../hooks/useLocalization';
 
 // Types
 interface CategoryProps {

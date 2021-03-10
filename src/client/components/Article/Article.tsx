@@ -91,15 +91,14 @@ export const ArticleComponent = ({ article, language }: ArticleProps) => {
           )}
           {localizedCategories && (
             <ul className={classes.tagList}>
-              {localizedCategories.map((category) => {
-                return (
+              {localizedCategories.map(
+                (category) =>
                   category && (
                     <li key={category._id} className={classes.tag}>
                       {category.title}
                     </li>
-                  )
-                );
-              })}
+                  ),
+              )}
             </ul>
           )}
         </div>
