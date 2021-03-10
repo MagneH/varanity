@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { Article } from './ArticleCard';
 import { MockProviderWrapper } from '../../../../test/__mocks__/Wrappers';
+import { Languages } from '../../hooks/useLocalization';
 
 // Tests
 it('should render title', () => {
@@ -19,12 +20,12 @@ it('should render title', () => {
           _type: 'category',
           slug: { current: 'test', _type: 'string' },
           title: 'Test',
-          mainCategory: { _ref: '123', _type: 'category' },
+          mainCategory: { _ref: '123', _type: 'category', _id: '123' },
           authors: [],
           isFeatured: true,
           _createdAt: '2021-01-11T17:10:50.339Z',
         }}
-        language="en"
+        language={Languages.en}
       />
     </MockProviderWrapper>,
   );

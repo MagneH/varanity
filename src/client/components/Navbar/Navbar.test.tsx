@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react';
-import { render, fireEvent, act } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 import * as redux from 'react-redux';
 import { Navbar } from './Navbar';
 import { MockProviderWrapper } from '../../../../test/__mocks__/Wrappers';
+import { Languages } from '../../hooks/useLocalization';
 
 // Mocks
 const WaypointMock = (Waypoint as any) as jest.Mock<ReactNode>;
@@ -27,7 +28,7 @@ beforeEach(() => {
 it('should be nav', () => {
   const { container } = render(
     <MockProviderWrapper>
-      <Navbar language="en" />
+      <Navbar language={Languages.en} />
     </MockProviderWrapper>,
   );
 
@@ -39,7 +40,7 @@ describe('stickyness', () => {
   it('should not be sticky by default', () => {
     const { container } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
       { wrapper: MemoryRouter },
     );
@@ -54,7 +55,7 @@ describe('stickyness', () => {
     });
     const { container } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -68,7 +69,7 @@ describe('stickyness', () => {
     });
     const { container } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -84,7 +85,7 @@ describe('stickyness', () => {
 
     const { container } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -107,7 +108,7 @@ describe('stickyness', () => {
 
     const { container } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -126,7 +127,7 @@ describe('offline status', () => {
     isOfflineMock.mockReturnValue(true);
     const { container } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -139,7 +140,7 @@ describe('hamburger', () => {
   it('should have menu hamburger button', () => {
     const { getByLabelText } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -149,7 +150,7 @@ describe('hamburger', () => {
   it('should not be open by default', () => {
     const { container } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -159,7 +160,7 @@ describe('hamburger', () => {
   it('should open when Menu button is clicked', () => {
     const { container, getByLabelText } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 
@@ -173,7 +174,7 @@ describe('hamburger', () => {
   it('should close when Menu button is clicked twice', () => {
     const { container, getByLabelText } = render(
       <MockProviderWrapper>
-        <Navbar language="en" />
+        <Navbar language={Languages.en} />
       </MockProviderWrapper>,
     );
 

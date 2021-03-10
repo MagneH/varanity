@@ -44,8 +44,8 @@ export interface LocalizedArticleModel extends SanityDocument {
   title: string;
   ingress?: SanityBlock[];
   body?: SanityBlock[];
-  mainCategory: { _ref: string; _type: string };
-  categories?: { _ref: string; _type: string }[];
+  mainCategory: { _ref: string; _type: string; _id: string };
+  categories?: { _ref: string; _type: string; _id: string }[];
   mainImage?: SanityImageObject & { alt: string };
   authors: { author: AuthorModel }[];
   isFeatured: boolean;

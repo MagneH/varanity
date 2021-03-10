@@ -13,7 +13,7 @@ import { Languages, useLocalize } from '../../hooks/useLocalization';
 
 // Types
 interface ArticleProps {
-  article: ArticleModel;
+  article: ArticleModel | LocalizedArticleModel;
   language: Languages;
 }
 
