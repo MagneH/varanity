@@ -11,17 +11,27 @@ import { isApplicationOfflineSelector } from '../../redux/modules/application';
 
 // Styles
 import classes from './Navbar.module.scss';
-import { PageModel } from '../../pages/Page';
+import { LocalizedPageModel } from '../../pages/Page';
 import useSelector from '../../redux/typedHooks';
+import { Languages, useLocalize } from '../../hooks/useLocalization';
+import { LocalizedCategoryModel } from '../../redux/modules/categories';
 
 // Exports
-export const Navbar = ({ language }: { language: string }) => {
+export const Navbar = ({ language }: { language: Languages }) => {
   const pages = useSelector((state) =>
-    Object.values(state.documents.data)
-      .filter((document: SanityDocument) => document._type === 'page')
-      .sort((e1, e2) => e1.title.localeCompare(e2.title)),
+    Object.values(state.documents.data).filter(
+      (document: SanityDocument) => document._type === 'page',
+    ),
   );
+  const localizedPages = useLocalize<LocalizedPageModel[]>(pages, [language]).sort((e1, e2) =>
+    e1.title.localeCompare(e2.title),
+  );
+
   const categories = useSelector((state) => Object.values(state.categories.data));
+  const localizedCategories = useLocalize<LocalizedCategoryModel[]>(categories, [
+    language,
+  ]).sort((e1, e2) => e1.title.localeCompare(e2.title));
+
   const location = useLocation();
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +47,7 @@ export const Navbar = ({ language }: { language: string }) => {
 
   // Close menu on navigation
   useEffect(() => setIsOpen(false), [location]);
-
+  console.log(location);
   return (
     <>
       <Waypoint
@@ -84,7 +94,7 @@ export const Navbar = ({ language }: { language: string }) => {
                 [classes.navbarListContentExpanded]: isOpen,
               })}
             >
-              {pages.map((page: PageModel) => (
+              {localizedPages.map((page) => (
                 <li
                   key={`page-${page.slug.current}`}
                   className={classNames(classes.navbarListItem)}
@@ -92,8 +102,8 @@ export const Navbar = ({ language }: { language: string }) => {
                   <NavLink to={`/${language}/pages/${page.slug.current}`}>{page.title}</NavLink>
                 </li>
               ))}
-              {categories &&
-                categories
+              {localizedCategories &&
+                localizedCategories
                   .filter((e) => e.slug.current === 'categories')
                   .map((category) => (
                     <li key="categories" className={classNames(classes.navbarListItem)}>
@@ -102,6 +112,17 @@ export const Navbar = ({ language }: { language: string }) => {
                       </NavLink>
                     </li>
                   ))}
+              <li key="categories" className={classNames(classes.navbarListItem)}>
+                <NavLink
+                  to={
+                    language === 'en'
+                      ? `${location.pathname.replace(language, 'no')}${location.search}`
+                      : `${location.pathname.replace(language, 'en')}${location.search}`
+                  }
+                >
+                  {language === 'no' ? 'English' : 'Norsk'}
+                </NavLink>
+              </li>
             </ul>
           </div>
         </CSSTransition>

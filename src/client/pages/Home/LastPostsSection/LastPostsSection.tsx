@@ -7,9 +7,10 @@ import { Article } from '../../../components/ArticleCard/ArticleCard';
 import classes from './LastPostsSection.module.scss';
 import useSelector from '../../../redux/typedHooks';
 import { ArticleModel } from '../../Article';
+import { Languages } from '../../../hooks/useLocalization';
 
 interface LastPostsSectionProps {
-  language: string;
+  language: Languages;
 }
 
 // Exports

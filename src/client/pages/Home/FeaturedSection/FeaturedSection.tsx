@@ -1,13 +1,17 @@
 import React from 'react';
 
 // Styles
-import { useQuery } from '@apollo/client';
+// import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import { Link } from '../../../components/Link/Link';
 import { useCategoryUrl } from '../../../hooks/useCategoryUrl';
 import { Blocks } from '../../../components/Blocks';
-import { FEATURED_ARTICLES } from './FeaturedSection.query';
+// import { FEATURED_ARTICLES } from './FeaturedSection.query';
 import { useMainImage } from '../../../hooks/useMainImage';
+import useSelector from '../../../redux/typedHooks';
+import { ArticleModel } from '../../Article';
+import { PageModel } from '../../Page';
+import { useLocalize } from '../../../hooks/useLocalization';
 
 interface FeaturedSectionProps {
   language: string;
@@ -15,9 +19,15 @@ interface FeaturedSectionProps {
 
 // Exports
 export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
-  const { data } = useQuery(FEATURED_ARTICLES);
-  const featuredArticle = (data && data.allArticle[0]) || {};
-  const { mainImage, mainCategory = {}, slug = {}, title, ingress } = featuredArticle;
+  // const { data } = useQuery(FEATURED_ARTICLES);
+  // const featuredArticle = (data && data.allArticle[0]) || {};
+  const localizeFeaturedArticle = useSelector((state) =>
+    Object.values(state.documents.data).find((e: ArticleModel | PageModel) => e.isFeatured),
+  );
+
+  const featuredArticle = useLocalize(localizeFeaturedArticle, [language]);
+  console.log(featuredArticle);
+  const { mainImage, mainCategory, slug, title, ingress } = featuredArticle;
 
   const [src, srcSet] = useMainImage(mainImage);
   const articleUrl = useCategoryUrl(mainCategory._id, slug.current);
@@ -36,7 +46,7 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
         <StyledTextLink to={`/${language}/${articleUrl}`}>
           <Title>{title}</Title>
         </StyledTextLink>
-        {ingress && <Blocks body={ingress.enRaw} />}
+        {ingress && <Blocks body={ingress} />}
       </Section>
     </>
   ) : null;

@@ -4,13 +4,14 @@ import React, { useMemo } from 'react';
 import classes from './CategoryCard.module.scss';
 import { urlFor } from '../../services/SanityService';
 import { Link } from '../Link/Link';
-import { CategoryModel } from '../../redux/modules/categories';
+import { CategoryModel, LocalizedCategoryModel } from '../../redux/modules/categories';
 import useSelector from '../../redux/typedHooks';
 import { ensure } from '../../lib/ensure';
+import { useLocalize } from '../../hooks/useLocalization';
 
 // Types
 interface CategoryProps {
-  category: CategoryModel;
+  category: LocalizedCategoryModel;
   language: string;
 }
 
@@ -18,6 +19,7 @@ export const Category = ({ category, language }: CategoryProps) => {
   const { ingress, title, mainImage } = category;
 
   const categories = useSelector((state) => state.categories.data);
+
   const categoryIdMap = useMemo(
     () =>
       Object.values(categories).reduce((acc: Record<CategoryModel['_id'], CategoryModel>, cur) => {
@@ -27,7 +29,10 @@ export const Category = ({ category, language }: CategoryProps) => {
     [categories],
   );
 
-  const urlCreator = (currentUrl: string, currentCategory: CategoryModel): string => {
+  const urlCreator = (
+    currentUrl: string,
+    currentCategory: LocalizedCategoryModel | CategoryModel,
+  ): string => {
     if (currentCategory.slug.current === 'categories') {
       return `${currentUrl}`;
     }
@@ -64,11 +69,7 @@ export const Category = ({ category, language }: CategoryProps) => {
           </div>
         </Link>
       )}
-      <Link
-        className={classes.postLink}
-        to={`/${language}/${currentUrl}`}
-        aria-label={category.title}
-      >
+      <Link className={classes.postLink} to={`/${language}/${currentUrl}`} aria-label={title}>
         <h2 className={classes.postTitle}>{title}</h2>
       </Link>
       {ingress && <small className={classes.postIngress}>{ingress}</small>}
