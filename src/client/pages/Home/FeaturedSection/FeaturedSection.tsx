@@ -26,7 +26,7 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
   );
 
   const localizedFeaturedArticle = useLocalize<LocalizedArticleModel>(featuredArticle, [language]);
-  const { mainImage, mainCategory, slug, title, ingress } = localizedFeaturedArticle ;
+  const { mainImage, mainCategory, slug, title, ingress } = localizedFeaturedArticle;
 
   const [src, srcSet] = useMainImage(mainImage);
   const articleUrl = useCategoryUrl(mainCategory._id, slug.current);
