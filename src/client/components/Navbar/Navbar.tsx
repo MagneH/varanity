@@ -47,7 +47,6 @@ export const Navbar = ({ language }: { language: Languages }) => {
 
   // Close menu on navigation
   useEffect(() => setIsOpen(false), [location]);
-  console.log(location);
   return (
     <>
       <Waypoint

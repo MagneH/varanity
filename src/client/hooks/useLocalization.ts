@@ -8,7 +8,6 @@ export const localize = (value: any | any[], languages: Languages[]): any => {
   if (typeof value === 'object') {
     if (/localeString/.test(value._type)) {
       const language = languages.find((lang) => value[lang]);
-      console.log(language);
       if (language) {
         return value[language];
       }

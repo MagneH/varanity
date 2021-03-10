@@ -33,7 +33,6 @@ export const ArticleComponent = ({ article, language }: ArticleProps) => {
   );
 
   const stateCategories = useSelector((state) => Object.values(state.categories.data));
-  console.log(stateCategories);
 
   const categoryIdMap = useMemo(
     () =>
@@ -54,9 +53,7 @@ export const ArticleComponent = ({ article, language }: ArticleProps) => {
     '_id',
   );
 
-  console.log(categories, language);
   const localizedCategories = useLocalize<LocalizedCategoryModel[]>(categories, [language]);
-  console.log(localizedCategories);
 
   const { mainImage } = article;
   let srcSet = '';
@@ -95,7 +92,6 @@ export const ArticleComponent = ({ article, language }: ArticleProps) => {
           {localizedCategories && (
             <ul className={classes.tagList}>
               {localizedCategories.map((category) => {
-                console.log('Kategori: ', category);
                 return (
                   category && (
                     <li key={category._id} className={classes.tag}>

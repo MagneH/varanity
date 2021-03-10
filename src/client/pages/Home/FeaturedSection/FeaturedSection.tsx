@@ -25,11 +25,11 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
     Object.values(state.documents.data).find((e: ArticleModel | PageModel) => e.isFeatured),
   );
 
-  const localizedFeaturedArticle = useLocalize<LocalizedArticleModel>(featuredArticle, [language]);
-  const { mainImage, mainCategory, slug, title, ingress } = localizedFeaturedArticle;
+  const localizedFeaturedArticle = useLocalize<LocalizedArticleModel>(featuredArticle, [language]) || {};
+  const { mainImage, mainCategory = {_id: undefined}, slug, title, ingress } = localizedFeaturedArticle;
 
   const [src, srcSet] = useMainImage(mainImage);
-  const articleUrl = useCategoryUrl(mainCategory._id, slug.current);
+  const articleUrl = useCategoryUrl(mainCategory._id, !!slug && slug.current);
 
   return featuredArticle ? (
     <>

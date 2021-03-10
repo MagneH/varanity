@@ -65,11 +65,9 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
   });
 
   const article = useLocalize<LocalizedArticleModel>(languageArticle, [language]);
-  console.log('Localized: ', article);
   const data = useSelector((state) => state.apiData.data);
 
   const articleWithData = useDataInterpolation<LocalizedArticleModel>(article, data);
-  console.log('Med data: ', articleWithData);
 
   // eslint-disable-next-line no-underscore-dangle
   if (isPreview) {
@@ -92,10 +90,6 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
   if (didFetch && !isLoading && !articleWithData) {
     return <NotFound />;
   }
-
-  console.log(articleWithData);
-
-  console.log('Language:', language);
 
   return articleWithData ? (
     <>
