@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { uniqBy } from 'lodash';
 import styled from 'styled-components';
-import { ArticleModel } from '../../pages/Article';
+import { LocalizedArticleModel } from '../../pages/Article';
 import { Blocks } from '../Blocks';
 
 import classes from './Article.module.scss';
@@ -10,13 +10,15 @@ import { ensure } from '../../lib/ensure';
 import { AuthorModel } from '../../redux/modules/authors';
 import { AuthorCard } from '../Author/AuthorCard';
 import useSelector from '../../redux/typedHooks';
-import { CategoryModel } from '../../redux/modules/categories';
+import { CategoryModel, LocalizedCategoryModel } from '../../redux/modules/categories';
+import { Languages, useLocalize } from '../../hooks/useLocalization';
 
 interface ArticleProps {
-  article: ArticleModel;
+  article: LocalizedArticleModel;
+  language: Languages;
 }
 
-export const ArticleComponent = ({ article }: ArticleProps) => {
+export const ArticleComponent = ({ article, language }: ArticleProps) => {
   const authorList = useSelector((state) =>
     article.authors
       ? article.authors
@@ -30,19 +32,17 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
       : [],
   );
 
-  const stateCategories = useSelector((state) => state.categories.data);
+  const stateCategories = useSelector((state) => Object.values(state.categories.data));
 
   const categoryIdMap = useMemo(
     () =>
-      Object.values(stateCategories).reduce(
-        (acc: Record<CategoryModel['_id'], CategoryModel>, cur) => {
-          acc[cur._id] = cur;
-          return acc;
-        },
-        {},
-      ),
+      stateCategories.reduce((acc: Record<CategoryModel['_id'], CategoryModel>, cur) => {
+        acc[cur._id] = cur;
+        return acc;
+      }, {}),
     [stateCategories],
   );
+
   let categoryIds = [article.mainCategory];
 
   if (article && article.categories) {
@@ -52,6 +52,8 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
     categoryIds.map((e) => categoryIdMap[e._ref]),
     '_id',
   );
+
+  const localizedCategories = useLocalize<LocalizedCategoryModel[]>(categories, [language]);
 
   const { mainImage } = article;
   let srcSet = '';
@@ -87,9 +89,9 @@ export const ArticleComponent = ({ article }: ArticleProps) => {
               <Blocks body={article.body} />
             </div>
           )}
-          {categories && (
+          {localizedCategories && (
             <ul className={classes.tagList}>
-              {categories.map(
+              {localizedCategories.map(
                 (category) =>
                   category && (
                     <li key={category._id} className={classes.tag}>

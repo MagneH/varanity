@@ -13,8 +13,9 @@ import { actions as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
 import { AuthorModel } from '../redux/modules/authors';
 import useSelector from '../redux/typedHooks';
-import { useLocalize } from '../hooks/useLocalization';
+import { Languages, useLocalize } from '../hooks/useLocalization';
 import { NotFound } from './errors/NotFound/NotFound';
+import { useDataInterpolation } from '../hooks/useDataInterpolation';
 
 // Types
 export interface ArticleProps {
@@ -23,16 +24,28 @@ export interface ArticleProps {
   location: Location;
   history: RouteComponentProps['history'];
   match: any;
-  language: string;
+  language: Languages;
   slug: string;
 }
 
 export interface ArticleModel extends SanityDocument {
+  title: Record<Languages, string>;
+  ingress?: Record<Languages, SanityBlock[]>;
+  body?: Record<Languages, SanityBlock[]>;
+  mainCategory: { _ref: string; _type: string };
+  categories?: { _ref: string; _type: string }[];
+  mainImage?: SanityImageObject & { alt: string };
+  authors: { author: AuthorModel }[];
+  isFeatured: boolean;
+  _createdAt: string;
+}
+
+export interface LocalizedArticleModel extends SanityDocument {
   title: string;
   ingress?: SanityBlock[];
   body?: SanityBlock[];
-  mainCategory: { _ref: string; _type: string };
-  categories?: { _ref: string; _type: string }[];
+  mainCategory: { _ref: string; _type: string; _id: string };
+  categories?: { _ref: string; _type: string; _id: string }[];
   mainImage?: SanityImageObject & { alt: string };
   authors: { author: AuthorModel }[];
   isFeatured: boolean;
@@ -51,7 +64,10 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
     return state.documents.data[slug];
   });
 
-  const article = useLocalize(languageArticle, [language]);
+  const article = useLocalize<LocalizedArticleModel>(languageArticle, [language]);
+  const data = useSelector((state) => state.apiData.data);
+
+  const articleWithData = useDataInterpolation<LocalizedArticleModel>(article, data);
 
   // eslint-disable-next-line no-underscore-dangle
   if (isPreview) {
@@ -64,26 +80,26 @@ export const Article = ({ isPreview, location, history, match, slug, language }:
 
   useEffect(() => {
     if (!isPreview) {
-      if (!article) {
+      if (!articleWithData) {
         setDidFetch(true);
         dispatch(documentActions.getOne.request(slug));
       }
     }
   }, [location]);
 
-  if (didFetch && !isLoading && !article) {
+  if (didFetch && !isLoading && !articleWithData) {
     return <NotFound />;
   }
 
-  return article ? (
+  return articleWithData ? (
     <>
       <Helmet>
         <title itemProp="name" lang="en">
-          {article.title}
+          {articleWithData.title}
         </title>
       </Helmet>
       <Main>
-        <ArticleComponent article={article as ArticleModel} />
+        <ArticleComponent article={articleWithData} language={language} />
       </Main>
     </>
   ) : (

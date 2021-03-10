@@ -3,7 +3,7 @@
   "short_name": "VaranBoiler",
   "theme_color": "#124e78",
   "background_color": "#222222",
-  "display": "browser",
+  "display": "standalone",
   "Scope": "/",
   "start_url": "/",
   "icons": [

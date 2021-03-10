@@ -27,7 +27,10 @@ export const FEATURED_ARTICLES = gql`
       slug {
         current
       }
-      title
+      title {
+        en
+        no
+      }
       ingress {
         _key
         _type

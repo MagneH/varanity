@@ -28,6 +28,7 @@ import { ArticleList } from '../../pages/ArticleList';
 import ThemeProvider from '../ThemeProvider';
 import { themeDefault } from '../Theme/themeDefault';
 import { NotFound } from '../../pages/errors/NotFound/NotFound';
+import { Languages } from '../../hooks/useLocalization';
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('asd-123', { testMode: process.env.NODE_ENV !== 'production' });
@@ -75,12 +76,14 @@ export const App = hot(() => {
                   const {
                     params: { language },
                   } = languageMatch;
-                  if (!['en', 'no'].includes(languageMatch.params.language)) {
+                  if (
+                    !(Object.values(Languages) as string[]).includes(languageMatch.params.language)
+                  ) {
                     return <Redirect to="/en/not-found" />;
                   }
                   return (
                     <LanguageRouter
-                      language={language}
+                      language={language as Languages}
                       languageMatch={languageMatch}
                       history={history}
                     />
@@ -99,7 +102,7 @@ export const App = hot(() => {
 });
 
 interface LanguageRouterProps {
-  language: string;
+  language: Languages;
   languageMatch: any;
   history: RouteComponentProps['history'];
 }
@@ -114,21 +117,15 @@ interface PreviewProps {
   match: {
     path: any;
   };
+  language: Languages;
 }
 
-const PreviewRouter = ({ match }: PreviewProps) => (
+const PreviewRouter = ({ match, language }: PreviewProps) => (
   <>
     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
     <Route
       path={`${match.path}/pages/:id`}
-      component={({
-        isDraft,
-        location,
-        history,
-        match: pagePreviewMatch,
-        language,
-        slug,
-      }: PageProps) => (
+      component={({ isDraft, location, history, match: pagePreviewMatch, slug }: PageProps) => (
         <Page
           isDraft={isDraft}
           location={location}
@@ -147,7 +144,6 @@ const PreviewRouter = ({ match }: PreviewProps) => (
         location,
         history,
         match: articlePreviewMatch,
-        language,
         slug,
       }: ArticleProps) => (
         <Article
@@ -277,7 +273,7 @@ export const LanguageRouter = ({ language, languageMatch, history }: LanguageRou
           <Route
             path={`${languageMatch.path}/preview`}
             component={({ match: previewMatch }: { match: { path: any }; location: Location }) => (
-              <PreviewRouter match={previewMatch} />
+              <PreviewRouter match={previewMatch} language={language} />
             )}
           />
           <Route

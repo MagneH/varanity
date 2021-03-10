@@ -10,6 +10,7 @@ import * as documents from './modules/documents';
 import * as templates from './modules/templates';
 import * as authors from './modules/authors';
 import * as categories from './modules/categories';
+import * as apiData from './modules/apiData';
 
 // Register modules
 const modules = {
@@ -20,6 +21,7 @@ const modules = {
   templates,
   authors,
   categories,
+  apiData,
 };
 
 // Exports

@@ -4,27 +4,29 @@ import React from 'react';
 import styled from 'styled-components';
 // import { FiCamera } from 'react-icons/fi';
 import classes from './ArticleCard.module.scss';
-import { ArticleModel } from '../../pages/Article';
+import { ArticleModel, LocalizedArticleModel } from '../../pages/Article';
 import { Link } from '../Link/Link';
 import { useCategoryUrl } from '../../hooks/useCategoryUrl';
 import { useMainImage } from '../../hooks/useMainImage';
 import { LazyImage } from '../LazyImage/LazyImage';
+import { Languages, useLocalize } from '../../hooks/useLocalization';
 
 // Types
 interface ArticleProps {
-  article: ArticleModel;
-  language: string;
+  article: ArticleModel | LocalizedArticleModel;
+  language: Languages;
 }
 
 export const Article = ({ article, language }: ArticleProps) => {
-  const { title, mainImage, slug, mainCategory } = article;
+  const localizedArticle = useLocalize<LocalizedArticleModel>(article, [language]);
+  const { title, mainImage, slug, mainCategory } = localizedArticle;
 
   const articleUrl = useCategoryUrl(mainCategory && mainCategory._ref, slug.current);
   const [src] = useMainImage(mainImage);
 
   return (
     <div className={classes.post}>
-      {article && (
+      {localizedArticle && (
         <Link to={`/${language}/${articleUrl}`}>
           <PictureWrapper>
             <LazyImage displayName={(mainImage && mainImage.alt) || ''} actualSrc={src} />

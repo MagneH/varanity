@@ -10,6 +10,7 @@ import { initialState as initialAuthorState } from './modules/authors';
 import { initialState as initialCategoryState } from './modules/categories';
 import { initialState as initialPreviewState } from './modules/previews';
 import { initialState as initialTemplateState } from './modules/templates';
+import { initialState as initialApiDataState } from './modules/apiData';
 
 // Mocks
 jest.mock('../lib/routerHistory', () => ({
@@ -36,6 +37,7 @@ it('should create a store with correct initial state', () => {
     categories: initialCategoryState,
     previews: initialPreviewState,
     templates: initialTemplateState,
+    apiData: initialApiDataState,
   });
 });
 it('should accept initial state as argument', () => {
@@ -50,6 +52,7 @@ it('should accept initial state as argument', () => {
     categories: initialCategoryState,
     previews: initialPreviewState,
     templates: initialTemplateState,
+    apiData: initialApiDataState,
   });
 });
 it('should use routerHistory and return it', () => {

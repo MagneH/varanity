@@ -12,6 +12,7 @@ import { actions as documentActions } from '../redux/modules/documents';
 import { Main } from '../components/Main/Main';
 import useSelector from '../redux/typedHooks';
 import { NotFound } from './errors/NotFound/NotFound';
+import { Languages } from '../hooks/useLocalization';
 
 // Types
 export interface PageProps {
@@ -20,16 +21,21 @@ export interface PageProps {
   location: Location;
   history: RouteComponentProps['history'];
   match: any;
-  language: string;
+  language: Languages;
   slug: string;
 }
 
 export interface PageModel extends SanityDocument {
+  title: Record<Languages, string>;
+  _createdAt: string;
+}
+
+export interface LocalizedPageModel extends SanityDocument {
   title: string;
   _createdAt: string;
 }
 
-export const Page = ({ isPreview, location, history, match, slug }: PageProps) => {
+export const Page = ({ isPreview, location, history, match, slug, language }: PageProps) => {
   const [didFetch, setDidFetch] = useState(false);
   const isLoading = useSelector((state) => state.documents.isLoading);
 
@@ -71,7 +77,7 @@ export const Page = ({ isPreview, location, history, match, slug }: PageProps) =
         </title>
       </Helmet>
       <Main>
-        <PageComponent page={page} />
+        <PageComponent page={page} language={language} />
       </Main>
     </>
   ) : (

@@ -12,42 +12,50 @@ import classes from './Home/LastPostsSection/LastPostsSection.module.scss';
 import articleClasses from '../components/Article/Article.module.scss';
 
 import { Article } from '../components/ArticleCard/ArticleCard';
-import { ArticleModel } from './Article';
+import { LocalizedArticleModel } from './Article';
 import { urlFor } from '../services/SanityService';
 import { ensure } from '../lib/ensure';
 import { Category } from '../components/CategoryCard/CategoryCard';
+import { Languages, useLocalize } from '../hooks/useLocalization';
+import { LocalizedCategoryModel } from '../redux/modules/categories';
 
 // Types
 export interface CategoryListProps {
   location: Location;
   history: RouteComponentProps['history'];
   match: any;
-  language: string;
+  language: Languages;
   slug: string;
 }
 
 export const ArticleList = ({ location, slug, language }: CategoryListProps) => {
   const [isFetched, setIsFetched] = useState(false);
   const category = useSelector((state) => state.categories.data[slug]);
+  const localizedCategory = useLocalize<LocalizedCategoryModel>(category, [language]);
+
   const childCategories = useSelector(
     (state) =>
-      category &&
-      Object.values(state.categories.data)
-        .filter((e) => e.parent && e.parent._ref === category._id)
-        .sort((e1, e2) => e1.title.localeCompare(e2.title)),
+      localizedCategory &&
+      Object.values(state.categories.data).filter(
+        (e) => e.parent && e.parent._ref === localizedCategory._id,
+      ),
   );
+  const localizedChildCategories = useLocalize<LocalizedCategoryModel[]>(childCategories, [
+    language,
+  ]).sort((e1, e2) => e1.title.localeCompare(e2.title));
 
   const articles = useSelector((state) =>
-    Object.values(state.documents.data)
-      .filter(
-        (document) =>
-          (document &&
-            document.categories &&
-            document.categories.some((e: SanityDocument) => e._ref === category._id)) ||
-          (!!document.mainCategory && document.mainCategory._ref === category._id),
-      )
-      .sort((e1, e2) => e1.title.localeCompare(e2.title)),
+    Object.values(state.documents.data).filter(
+      (document) =>
+        (document &&
+          document.categories &&
+          document.categories.some((e: SanityDocument) => e._ref === localizedCategory._id)) ||
+        (!!document.mainCategory && document.mainCategory._ref === localizedCategory._id),
+    ),
   );
+  const localizedArticles = useLocalize<LocalizedArticleModel[]>(articles, [
+    language,
+  ]).sort((e1, e2) => e1.title.localeCompare(e2.title));
 
   const dispatch = useDispatch();
 
@@ -58,7 +66,7 @@ export const ArticleList = ({ location, slug, language }: CategoryListProps) => 
     }
   }, [location]);
 
-  const { mainImage } = category;
+  const { mainImage } = localizedCategory;
   let srcSet = '';
   let src = '';
   if (typeof mainImage !== 'undefined' && typeof mainImage.asset !== 'undefined') {
@@ -73,12 +81,11 @@ export const ArticleList = ({ location, slug, language }: CategoryListProps) => 
       urlFor(ensure(mainImage)).withOptions(mainImage).width(150).height(150).fit('max').url() ||
       '';
   }
-
-  return category ? (
+  return localizedCategory ? (
     <>
       <Helmet>
         <title itemProp="name" lang="en">
-          {category.title}
+          {localizedCategory.title}
         </title>
       </Helmet>
       <Main>
@@ -88,12 +95,12 @@ export const ArticleList = ({ location, slug, language }: CategoryListProps) => 
             <img src={src || ''} alt={mainImage.alt} />
           </picture>
         )}
-        {childCategories.length > 0 && (
+        {localizedChildCategories.length > 0 && (
           <Section className={classes.lastPostsSection}>
-            {category.title !== 'Categories' && <h1>{category.title}</h1>}
-            <h2>Categories</h2>
+            {localizedCategory.title !== 'Categories' && <h1>{localizedCategory.title}</h1>}
+            <h2>{language === 'no' ? 'Kategorier' : 'Categories'}</h2>
             <div className={classes.lastPostsSectionGrid}>
-              {childCategories.map((childCategory) => (
+              {localizedChildCategories.map((childCategory) => (
                 <Category
                   category={childCategory}
                   key={`childCategory-${childCategory.slug.current}`}
@@ -103,13 +110,13 @@ export const ArticleList = ({ location, slug, language }: CategoryListProps) => 
             </div>
           </Section>
         )}
-        {articles.length > 0 && (
+        {localizedArticles.length > 0 && (
           <Section className={classes.lastPostsSection}>
-            <h2>Articles</h2>
+            <h2>{language === Languages.en ? 'Articles' : 'Artikler'}</h2>
             <div className={classes.lastPostsSectionGrid}>
-              {articles.map((article) => (
+              {localizedArticles.map((article) => (
                 <Article
-                  article={article as ArticleModel}
+                  article={article}
                   key={`article-${article.slug.current}`}
                   language={language}
                 />

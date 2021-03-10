@@ -1,8 +1,15 @@
 import { ActionType, createAction, createReducer } from 'typesafe-actions';
 import cloneDeep from 'lodash/cloneDeep';
 import { SanityDocument } from '@sanity/client';
+import { Languages } from '../../hooks/useLocalization';
 
 export interface CategoryModel extends SanityDocument {
+  slug: { current: string; _type: string };
+  title: Record<Languages, string>;
+  parent: { _ref: string };
+}
+
+export interface LocalizedCategoryModel extends SanityDocument {
   slug: { current: string; _type: string };
   title: string;
   parent: { _ref: string };

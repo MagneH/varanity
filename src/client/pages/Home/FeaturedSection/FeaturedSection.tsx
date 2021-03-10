@@ -1,26 +1,42 @@
 import React from 'react';
 
 // Styles
-import { useQuery } from '@apollo/client';
+// import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import { Link } from '../../../components/Link/Link';
 import { useCategoryUrl } from '../../../hooks/useCategoryUrl';
 import { Blocks } from '../../../components/Blocks';
-import { FEATURED_ARTICLES } from './FeaturedSection.query';
+// import { FEATURED_ARTICLES } from './FeaturedSection.query';
 import { useMainImage } from '../../../hooks/useMainImage';
+import useSelector from '../../../redux/typedHooks';
+import { ArticleModel, LocalizedArticleModel } from '../../Article';
+import { PageModel } from '../../Page';
+import { Languages, useLocalize } from '../../../hooks/useLocalization';
 
 interface FeaturedSectionProps {
-  language: string;
+  language: Languages;
 }
 
 // Exports
 export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
-  const { data } = useQuery(FEATURED_ARTICLES);
-  const featuredArticle = (data && data.allArticle[0]) || {};
-  const { mainImage, mainCategory = {}, slug = {}, title, ingress } = featuredArticle;
+  // const { data } = useQuery(FEATURED_ARTICLES);
+  // const featuredArticle = (data && data.allArticle[0]) || {};
+  const featuredArticle = useSelector((state) =>
+    Object.values(state.documents.data).find((e: ArticleModel | PageModel) => e.isFeatured),
+  );
+
+  const localizedFeaturedArticle =
+    useLocalize<LocalizedArticleModel>(featuredArticle, [language]) || {};
+  const {
+    mainImage,
+    mainCategory = { _id: undefined },
+    slug,
+    title,
+    ingress,
+  } = localizedFeaturedArticle;
 
   const [src, srcSet] = useMainImage(mainImage);
-  const articleUrl = useCategoryUrl(mainCategory._id, slug.current);
+  const articleUrl = useCategoryUrl(mainCategory._id, (!!slug && slug.current) || '');
 
   return featuredArticle ? (
     <>
@@ -36,7 +52,7 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
         <StyledTextLink to={`/${language}/${articleUrl}`}>
           <Title>{title}</Title>
         </StyledTextLink>
-        {ingress && <Blocks body={ingress.enRaw} />}
+        {ingress && <Blocks body={ingress} />}
       </Section>
     </>
   ) : null;

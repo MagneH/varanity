@@ -1,13 +1,19 @@
 import { useMemo } from 'react';
 import { SanityDocument } from '@sanity/client';
-import { SanityDocumentWithDataModel } from '../../../types/SanityDocumentWithDataModel';
-import { ensure } from '../lib/ensure';
 
 const replacerCurry = (data: Record<string, string>) => (intpl = '') => {
-  const key = ensure(intpl.match(/[A-z]+/gm))[0];
+  const search = intpl.match(/[A-z]+/gm);
+  if (Array.isArray(search)) {
+    const key = search[0];
+    // eslint-disable-next-line no-console
+    if (!(key in data)) console.warn(`Key ${key} from ${intpl} not found in details Object`);
+    // eslint-disable-next-line no-console
+    if (key === '') console.warn(`Key is empty`);
+    return data[key] || intpl;
+  }
   // eslint-disable-next-line no-console
-  if (!(key in data)) console.warn(`Key ${key} from ${intpl} not found in details Object`);
-  return data[key] || intpl;
+
+  return intpl;
 };
 
 const interpolator = (string: string, data: Record<string, string>) => {
@@ -39,8 +45,8 @@ export const interpolate = (value: any, data: Record<string, string>): any => {
   return value;
 };
 
-export const useDataInterpolation = (
+export const useDataInterpolation = <T>(
   document: SanityDocument,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data: any,
-): SanityDocumentWithDataModel => useMemo(() => interpolate(document, data), [document, data]);
+): T => useMemo(() => interpolate(document, data), [document, data]);
