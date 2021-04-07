@@ -29,14 +29,15 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
     useLocalize<LocalizedArticleModel>(featuredArticle, [language]) || {};
   const {
     mainImage,
-    mainCategory = { _id: undefined },
+    mainCategory = { _ref: undefined },
     slug,
     title,
     ingress,
   } = localizedFeaturedArticle;
 
   const [src, srcSet] = useMainImage(mainImage);
-  const articleUrl = useCategoryUrl(mainCategory._id, (!!slug && slug.current) || '');
+  console.log(mainCategory, mainCategory._ref, (!!slug && slug.current) || '');
+  const articleUrl = useCategoryUrl(mainCategory._ref, (!!slug && slug.current) || '');
 
   return featuredArticle ? (
     <>
