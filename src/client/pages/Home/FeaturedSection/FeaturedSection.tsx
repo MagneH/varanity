@@ -36,7 +36,6 @@ export const FeaturedSection = ({ language }: FeaturedSectionProps) => {
   } = localizedFeaturedArticle;
 
   const [src, srcSet] = useMainImage(mainImage);
-  console.log(mainCategory, mainCategory._ref, (!!slug && slug.current) || '');
   const articleUrl = useCategoryUrl(mainCategory._ref, (!!slug && slug.current) || '');
 
   return featuredArticle ? (
