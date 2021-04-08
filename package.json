@@ -57,7 +57,7 @@
     "@types/tti-polyfill": "^0.2.0",
     "classnames": "^2.2.6",
     "compression": "^1.7.3",
-    "connected-react-router": "^6.8.0",
+    "connected-react-router": "^6.9.1",
     "core-js": "^3.9.0",
     "cross-fetch": "^3.0.6",
     "dotenv": "^8.2.0",
