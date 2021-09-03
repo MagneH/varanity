@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.11",
-    "@babel/runtime": "^7.13.2",
+    "@babel/runtime": "^7.15.4",
     "@hapi/boom": "^9.1.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
